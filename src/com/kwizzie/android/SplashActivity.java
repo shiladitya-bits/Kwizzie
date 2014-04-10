@@ -1,9 +1,11 @@
 package com.kwizzie.android;
 
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 public class SplashActivity extends Activity {
 
@@ -21,4 +23,19 @@ public class SplashActivity extends Activity {
         return true;
     }
     
+    public void onClick(View v){
+    	switch(v.getId()){
+    	case R.id.LoginB :
+    		Intent intentLogin = new Intent(this,LoginActivity.class);
+    		startActivity(intentLogin);
+    	break;
+    	case R.id.signUpB :
+    		Intent intentSignUp = new Intent(this,RegistrationActivity.class);
+    		startActivity(intentSignUp);
+    	break;	
+    	
+    	
+    	}
+    	
+    }
 }

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_text_question);
+		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
+		profilePictureView.setImageBitmap(Utils.getProfilePicture());
+		
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		quesSubTitle = (TextView) findViewById(R.id.questionSubTitle);
 		

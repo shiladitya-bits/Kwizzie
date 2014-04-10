@@ -3,6 +3,7 @@ package com.kwizzie.android;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -23,11 +24,13 @@ public class PrivateQuizFinishActivity extends Activity {
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
-		SharedPreferences  pref = getPreferences(MODE_PRIVATE);
+		SharedPreferences  pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		Gson gson = new Gson();
 	    String json = pref.getString("player", "");
 	    player = gson.fromJson(json, Player.class);
 	    //TODO backend call player  , quiz room nid , score
+	    TextView scoreTv = (TextView) findViewById(R.id.scoreTv);
+	    scoreTv.setText("You scored "+playerScore);
 	    
 	}
 

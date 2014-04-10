@@ -36,7 +36,8 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_picture_question);
-		
+		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
+		profilePictureView.setImageBitmap(Utils.getProfilePicture());
 		quesTitle = (TextView) findViewById(R.id.picQuestionTitle);
 		view = (ImageView)findViewById(R.id.pictureQuestionImageView);
 		

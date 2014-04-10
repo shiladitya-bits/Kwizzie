@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -30,6 +31,8 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_video_question);
+		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
+		profilePictureView.setImageBitmap(Utils.getProfilePicture());
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		view = (VideoView)findViewById(R.id.questionvideoView);		
 		questions =  getIntent().getParcelableArrayListExtra("questions");		

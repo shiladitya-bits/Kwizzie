@@ -19,6 +19,7 @@
 	       android:textColor="@android:color/white"
         />   
         <ImageView
+            android:id="@+id/profile_pic_imageview"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:layout_weight="80"

@@ -15,6 +15,7 @@
     android:layout_weight="80"
     >
 <Button 
+    android:id="@+id/privateQuizRoomB"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Join Private Quiz Room"
@@ -22,10 +23,11 @@
     android:layout_marginRight="30dp"
     android:layout_marginTop="80dp"
     android:background="@drawable/button_rounded"
-   
+    android:onClick="onBtnClick"
     />
 
 <Button 
+    android:id="@+id/publicQuizRoomB"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Join Public Quiz Room"
@@ -33,6 +35,7 @@
     android:layout_marginRight="30dp"
     android:layout_marginTop="40dp"
     android:background="@drawable/button_rounded"
+    android:onClick="onBtnClick"
     />
 </LinearLayout>
 </LinearLayout>
