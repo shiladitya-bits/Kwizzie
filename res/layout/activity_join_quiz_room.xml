@@ -1,0 +1,38 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
+    
+ >
+ <include layout="@layout/join_quizroom_header_layout"/>
+ <LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="80"
+    >
+<Button 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Join Private Quiz Room"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginTop="80dp"
+    android:background="@drawable/button_rounded"
+   
+    />
+
+<Button 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Join Public Quiz Room"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginTop="40dp"
+    android:background="@drawable/button_rounded"
+    />
+</LinearLayout>
+</LinearLayout>

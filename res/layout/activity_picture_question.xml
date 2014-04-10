@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:weightSum="100"
+	android:background="@color/app_background"
+ >
+ <include layout="@layout/question_header_layout"/> 
+
+    <TextView
+        android:id="@+id/picQuestionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Here is a very very very long question you have to answer .. come on !!!" 
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/white" 
+        android:layout_weight="10" 
+        android:textSize="15sp"   
+        />
+    
+    <ImageView 
+        android:id="@+id/pictureQuestionImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_margin="20dp"
+        android:contentDescription="Question Picture"
+        android:layout_weight="40"
+  		android:maxHeight="200dp"
+  		android:maxWidth="200dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        />
+    
+    <LinearLayout
+        android:id="@+id/answerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="100" 
+        android:layout_weight="50"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+</LinearLayout>
+</LinearLayout>

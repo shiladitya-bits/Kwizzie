@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textAnswerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:weightSum="100">
+   
+<EditText
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:ems="20"
+    android:hint="answer"
+    android:layout_weight="30"
+    />    
+<Button 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"    
+	android:text="Proceed"
+	android:layout_weight="70"
+    />
+
+</LinearLayout>

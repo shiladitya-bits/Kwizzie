@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kwizzie</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_registration">Registration</string>
+    <string name="title_activity_registration_complete">Registration Complete</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_mcqquestion">MCQQuestionActivity</string>
+    <string name="title_activity_picture_question">PictureQuestionActivity</string>
+    <string name="title_activity_text_question">TextQuestionActivity</string>
+    <string name="title_activity_video_question">VideoQuestionActivity</string>
+    <string name="title_activity_audio">AudioActivity</string>
+    <string name="title_activity_audio_question">AudioQuestionActivity</string>
+    <string name="title_activity_qrquestion">QRQuestionActivity</string>
+    <string name="sample_question_title">Sample Question Title</string>
+    <string name="title_activity_private_start_quiz">PrivateStartQuizActivity</string>
+    <string name="title_activity_private_quiz_finish">PrivateQuizFinishActivity</string>
+    <string name="title_activity_join_quiz_room">JoinQuizRoomActivity</string>
+
+</resources>

@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:weightSum="100"
+ >
+  <include layout="@layout/question_header_layout"/>      
+
+  <TextView
+        android:id="@+id/questionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Here is a very very very long question you have to answer .. come on !!!" 
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/black" 
+        android:layout_weight="20" 
+        android:textSize="15sp"     
+        />
+  
+    <TextView
+        android:id="@+id/questionSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Small Subtitle of question!" 
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/black" 
+        android:layout_weight="5" 
+        android:textSize="15sp"     
+        />
+   
+    
+    <LinearLayout
+        android:id="@+id/answerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="100" 
+        android:layout_weight="60"
+        >
+
+</LinearLayout>
+
+</LinearLayout>

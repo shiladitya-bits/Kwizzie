@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kwizzie.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.kwizzie.android.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.RegistrationActivity"
+            android:label="@string/title_activity_registration"
+            android:parentActivityName="com.kwizzie.android.SplashActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kwizzie.android.SplashActivity" />
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.RegistrationCompleteActivity"
+            android:label="@string/title_activity_registration_complete"
+            android:parentActivityName="com.kwizzie.android.SplashActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kwizzie.android.SplashActivity" />
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName="com.kwizzie.android.SplashActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kwizzie.android.SplashActivity" />
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.PictureQuestionActivity"
+            android:label="@string/title_activity_picture_question" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.TextQuestionActivity"
+            android:label="@string/title_activity_text_question" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.VideoQuestionActivity"
+            android:label="@string/title_activity_video_question" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.AudioActivity"
+            android:label="@string/title_activity_audio" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.AudioQuestionActivity"
+            android:label="@string/title_activity_audio_question" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.QRQuestionActivity"
+            android:label="@string/title_activity_qrquestion" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.PrivateStartQuizActivity"
+            android:label="@string/title_activity_private_start_quiz" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.PrivateQuizFinishActivity"
+            android:label="@string/title_activity_private_quiz_finish" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.JoinQuizRoomActivity"
+            android:label="@string/title_activity_join_quiz_room" >
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
+    >
+
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Name" 
+        android:ems="20"
+        android:layout_weight="10"
+        android:layout_margin="10dp"
+        />
+    <EditText
+        android:id="@+id/usernameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="username" 
+        android:ems="20"
+        android:layout_weight="10"
+        android:layout_margin="10dp"/>
+    <EditText
+        android:id="@+id/emailText"
+        android:inputType="textEmailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="email ID" 
+        android:ems="20"
+        android:layout_weight="10"
+        android:layout_margin="10dp"/>
+    <EditText
+        android:id="@+id/passwordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="password" 
+        android:ems="20"
+        android:layout_weight="10"
+        android:layout_margin="10dp"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/retypePasswordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="retype your password" 
+        android:ems="20"
+        android:layout_weight="10"
+        android:layout_margin="10dp"
+        android:inputType="textPassword"/>
+    
+    <Button 
+        android:id="@+id/signUpB"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded"
+        android:layout_gravity="center"
+        android:text="Sign Up"
+        />
+    
+
+</LinearLayout>
