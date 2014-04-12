@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
+	TextView scoreTv;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,9 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
 		profilePictureView.setImageBitmap(Utils.getProfilePicture());
 		quesTitle = (TextView) findViewById(R.id.picQuestionTitle);
+
+		View embedLayout = findViewById(R.id.embedLayout);
+		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
 		view = (ImageView)findViewById(R.id.pictureQuestionImageView);
 		
 		//TODO setQuizRoomName
@@ -47,7 +52,7 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
-		
+		scoreTv.setText(String.valueOf(playerScore));
 		PictureQuestion ques = (PictureQuestion)questions.get(questionNumber);		
 		ques.getAnswerType().setEvaluateAnswerController(this);		
 		quesTitle.setText(ques.getQuestionTitle());
@@ -104,6 +109,7 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 	public void onCorrectAnswer() {
 		//TODO increment according to timer
 		playerScore=playerScore + 5;
+		scoreTv.setText(String.valueOf(playerScore));
 		questionNumber++;
 		if(questionNumber==questions.size()){
 			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);

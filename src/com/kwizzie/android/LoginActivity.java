@@ -6,6 +6,9 @@ import java.io.InputStream;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -14,6 +17,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,26 +68,23 @@ public class LoginActivity extends Activity {
 			String jsonPlayer = gson.toJson(player);
 			prefEditor.putString("player", jsonPlayer);
 			prefEditor.commit();
-			
-			new DownloadImageTask().execute(player.getDetails().getPhotoUrl());
-			getRoundedShape(imageBitmap);
-			String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/kwizzie";
-			File dir = new File(filePath);
-			if(!dir.exists()){
-				dir.mkdirs();
+			if(isNetworkAvailable()){
+				new DownloadImageTask().execute(player.getDetails().getPhotoUrl());	
+			} else {
+				new AlertDialog.Builder(LoginActivity.this).setMessage("Can not connect to network. Please check your data connection.")
+				.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						int pid = android.os.Process.myPid();
+						android.os.Process.killProcess(pid);
+						Intent intent = new Intent(Intent.ACTION_MAIN);
+						intent.addCategory(Intent.CATEGORY_HOME);
+						startActivity(intent);
+					}
+				}).setCancelable(false).show();
 			}
-			File file = new File(dir , "profilePic.png");
-			try{
-			FileOutputStream fout = new FileOutputStream(file);
-			imageBitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
-			fout.flush();
-			fout.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
-			
-			Intent intent = new Intent(getApplicationContext(),JoinQuizRoomActivity.class);
-			startActivity(intent);
+		
 		}
 	});
 	}
@@ -125,12 +127,8 @@ public class LoginActivity extends Activity {
 		  // TODO Auto-generated method stub
 		  int targetWidth = 50;
 		  int targetHeight = 50;
-		  Bitmap targetBitmap = Bitmap.createBitmap(targetWidth, 
-
-		                            targetHeight,Bitmap.Config.ARGB_8888);
-		  
-
-		                Canvas canvas = new Canvas(targetBitmap);
+		  Bitmap targetBitmap = Bitmap.createBitmap(targetWidth, targetHeight,Bitmap.Config.ARGB_8888);
+          Canvas canvas = new Canvas(targetBitmap);
 		  Path path = new Path();
 		  path.addCircle(((float) targetWidth - 1) / 2,
 		  ((float) targetHeight - 1) / 2,
@@ -141,39 +139,69 @@ public class LoginActivity extends Activity {
 
 		                canvas.clipPath(path);
 		  Bitmap sourceBitmap = scaleBitmapImage;
-		  canvas.drawBitmap(sourceBitmap, 
-		                                new Rect(0, 0, sourceBitmap.getWidth(),
-		    sourceBitmap.getHeight()), 
-		                                new Rect(0, 0, targetWidth,
-		    targetHeight), null);
+		  canvas.drawBitmap(sourceBitmap, new Rect(0, 0, sourceBitmap.getWidth(),
+		    sourceBitmap.getHeight()), new Rect(0, 0, targetWidth, targetHeight), null);
 		  return targetBitmap;
 		 }
 
 	 //sets profile pic in imageBitmap from URL
 	 private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 			
-			@Override
-			protected Bitmap doInBackground(String... arg0) {
-				String url = arg0[0];
-				
-				try{
-					InputStream in = new java.net.URL(url).openStream();
-					imageBitmap = BitmapFactory.decodeStream(in);
-				} catch(Exception e){
-					e.printStackTrace();
-				}
-				return imageBitmap;
+		@Override
+		protected Bitmap doInBackground(String... arg0) {
+			String url = arg0[0];
+			
+			try{
+				InputStream in = new java.net.URL(url).openStream();
+				imageBitmap = BitmapFactory.decodeStream(in);
+			} catch(Exception e){
+				e.printStackTrace();
 			}
+			return imageBitmap;
+		}
 
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				
-			}
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			saveImage();
+		}
 
-			@Override
-			protected void onPreExecute() {
-				
-			}
+		@Override
+		protected void onPreExecute() {
+			
+		}
 	 }
 
+	 public void saveImage(){
+		imageBitmap = getRoundedShape(imageBitmap);
+		String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/kwizzie";
+		File dir = new File(filePath);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		File file = new File(dir , "profilePic.png");
+		try{
+		FileOutputStream fout = new FileOutputStream(file);
+		imageBitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
+		fout.flush();
+		fout.close();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		Intent intent = new Intent(getApplicationContext(),JoinQuizRoomActivity.class);
+		startActivity(intent);
+	 }
+	 
+	public boolean isNetworkAvailable() 
+	{
+        ConnectivityManager cm = (ConnectivityManager) 
+          getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
 }

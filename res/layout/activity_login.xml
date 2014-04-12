@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="20"
         android:hint="username" 
+        android:textColor="@android:color/white"
         android:layout_margin="20dp"
         />
     
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:ems="20"
         android:hint="password"
+        android:textColor="@android:color/white"
         android:inputType="textPassword"
         android:layout_margin="20dp"
       />

@@ -6,7 +6,9 @@
 	android:weightSum="100"
 	android:background="@color/app_background"
  >
- <include layout="@layout/question_header_layout"/> 
+ <include 
+     android:id="@+id/embedLayout"
+     layout="@layout/question_header_layout"/> 
 
     <TextView
         android:id="@+id/picQuestionTitle"

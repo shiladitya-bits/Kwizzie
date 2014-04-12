@@ -10,6 +10,7 @@
         android:background="@android:color/black"
         >
   	    <TextView 
+  	       android:id="@+id/scoreTv"
 	       android:layout_width="fill_parent"
 	       android:layout_height="fill_parent"
 	       android:text="score"

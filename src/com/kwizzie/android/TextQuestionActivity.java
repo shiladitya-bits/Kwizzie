@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
-	
+	TextView scoreTv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,13 +38,16 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 		
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		quesSubTitle = (TextView) findViewById(R.id.questionSubTitle);
+
+		View embedLayout = findViewById(R.id.embedLayout);
+		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
 		
 		questions =  getIntent().getParcelableArrayListExtra("questions");
 		questionNumber = getIntent().getExtras().getInt("questionNumber");
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
-		
+		scoreTv.setText(String.valueOf(playerScore));
 		TextQuestion ques = (TextQuestion)questions.get(questionNumber);
 		ques.getAnswerType().setEvaluateAnswerController(this);
 		
@@ -65,6 +69,7 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 	public void onCorrectAnswer() {
 		questionNumber++;
 		playerScore=playerScore + 5;
+		scoreTv.setText(String.valueOf(playerScore));
 		if(questionNumber==questions.size()){
 			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
 			intent.putExtra("quizRoomName",quizRoomName);

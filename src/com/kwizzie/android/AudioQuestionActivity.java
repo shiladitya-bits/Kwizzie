@@ -29,12 +29,16 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
+	TextView scoreTv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_audio_question);
 		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
 		profilePictureView.setImageBitmap(Utils.getProfilePicture());
+
+		View embedLayout = findViewById(R.id.embedLayout);
+		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
 		playB = (Button) findViewById(R.id.playB);
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		questions =  getIntent().getParcelableArrayListExtra("questions");		
@@ -42,6 +46,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
+		scoreTv.setText(String.valueOf(playerScore));
 		
 		AudioQuestion ques = (AudioQuestion)questions.get(questionNumber);		
 		ques.getAnswerType().setEvaluateAnswerController(this);		
@@ -89,6 +94,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	public void onCorrectAnswer() {
 		questionNumber++;
 		playerScore=playerScore + 5;
+		scoreTv.setText(String.valueOf(playerScore));
 		if(questionNumber==questions.size()){
 			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
 			intent.putExtra("quizRoomName",quizRoomName);

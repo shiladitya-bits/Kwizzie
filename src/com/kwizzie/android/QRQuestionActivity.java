@@ -8,12 +8,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kwizzie.android.qr.IntentIntegrator;
 import com.kwizzie.android.qr.IntentResult;
-import com.kwizzie.model.EvaluateAnswer;
 import com.kwizzie.model.Player;
 import com.kwizzie.model.QRAnswerType;
 import com.kwizzie.model.QRQuestion;
@@ -30,7 +29,7 @@ public class QRQuestionActivity extends Activity  {
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
-	
+	TextView scoreTv;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +37,8 @@ public class QRQuestionActivity extends Activity  {
 		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
 		profilePictureView.setImageBitmap(Utils.getProfilePicture());
 		
+		View embedLayout = findViewById(R.id.embedLayout);
+		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		
 		//TODO setQuizRoomName
@@ -46,7 +47,7 @@ public class QRQuestionActivity extends Activity  {
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
-		
+		scoreTv.setText(String.valueOf(playerScore));
 		ques = (QRQuestion)questions.get(questionNumber);		
 		//ques.getAnswerType().setEvaluateAnswerController(this);		
 		quesTitle.setText(ques.getQuestionTitle());
@@ -78,23 +79,10 @@ public class QRQuestionActivity extends Activity  {
 		return true;
 	}
 	
-	
-	/*@Override 
-    public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) 
-    {
-    	//Toast.makeText(this.getApplicationContext(), "Scanned code " + rawResult.getText(), Toast.LENGTH_LONG).show();
-    	String output = rawResult.getText();
-    	String correctAns = ((QRAnswerType)ques.getAnswerType()).getAnswer();
-    	if(output.equalsIgnoreCase(correctAns)){
-    		onCorrectAnswer();
-    	} else {
-    		onWrongAnswer();
-    	}
-    }*/
-
 	public void onCorrectAnswer() {
 		questionNumber++;
 		playerScore=playerScore + 5;
+		scoreTv.setText(String.valueOf(playerScore));
 		if(questionNumber==questions.size()){
 			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
 			intent.putExtra("quizRoomName",quizRoomName);

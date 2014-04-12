@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
+	TextView scoreTv;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,9 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 		setContentView(R.layout.activity_video_question);
 		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
 		profilePictureView.setImageBitmap(Utils.getProfilePicture());
+
+		View embedLayout = findViewById(R.id.embedLayout);
+		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		view = (VideoView)findViewById(R.id.questionvideoView);		
 		questions =  getIntent().getParcelableArrayListExtra("questions");		
@@ -40,7 +45,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
-		
+		scoreTv.setText(String.valueOf(playerScore));
 		VideoQuestion ques = (VideoQuestion)questions.get(questionNumber);		
 		ques.getAnswerType().setEvaluateAnswerController(this);
 		quesTitle.setText(ques.getQuestionTitle());
@@ -61,6 +66,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 	public void onCorrectAnswer() {
 		questionNumber++;
 		playerScore=playerScore + 5;
+		scoreTv.setText(String.valueOf(playerScore));
 		if(questionNumber==questions.size()){
 			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
 			intent.putExtra("quizRoomName",quizRoomName);

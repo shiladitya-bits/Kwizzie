@@ -29,7 +29,7 @@ public class PrivateQuizFinishActivity extends Activity {
 	    String json = pref.getString("player", "");
 	    player = gson.fromJson(json, Player.class);
 	    //TODO backend call player  , quiz room nid , score
-	    TextView scoreTv = (TextView) findViewById(R.id.scoreTv);
+	    TextView scoreTv = (TextView) findViewById(R.id.finalScoreTv);
 	    scoreTv.setText("You scored "+playerScore);
 	    
 	}

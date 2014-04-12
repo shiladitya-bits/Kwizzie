@@ -5,7 +5,9 @@
 	android:orientation="vertical"
 	android:weightSum="100"
  >
-  <include layout="@layout/question_header_layout"/>      
+  <include 
+      android:id="@+id/embedLayout"
+      layout="@layout/question_header_layout"/>      
 
   <TextView
         android:id="@+id/questionTitle"
