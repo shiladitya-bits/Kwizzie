@@ -60,48 +60,56 @@
         </activity>
         <activity
             android:name="com.kwizzie.android.PictureQuestionActivity"
-            android:label="@string/title_activity_picture_question" 
+            android:label="@string/title_activity_picture_question"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.TextQuestionActivity"
-            android:label="@string/title_activity_text_question" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_text_question"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.VideoQuestionActivity"
-            android:label="@string/title_activity_video_question" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_video_question"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.AudioActivity"
-            android:label="@string/title_activity_audio" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_audio"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.AudioQuestionActivity"
-            android:label="@string/title_activity_audio_question" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_audio_question"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.QRQuestionActivity"
-            android:label="@string/title_activity_qrquestion" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_qrquestion"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.PrivateStartQuizActivity"
-            android:label="@string/title_activity_private_start_quiz" 
-             android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_private_start_quiz"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.PrivateQuizFinishActivity"
-            android:label="@string/title_activity_private_quiz_finish" 
+            android:label="@string/title_activity_private_quiz_finish"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
             android:name="com.kwizzie.android.JoinQuizRoomActivity"
-            android:label="@string/title_activity_join_quiz_room" 
-        	 android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:label="@string/title_activity_join_quiz_room"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.LeaderBoardActivity"
+            android:label="@string/title_activity_leader_board" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.PublicQuizRoomActivity"
+            android:label="@string/title_activity_public_quiz_room" >
         </activity>
     </application>
 

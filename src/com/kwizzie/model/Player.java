@@ -7,8 +7,8 @@ public class Player {
 	private String userName;
 	private String password;
 	private PlayerPersonalDetails details;
-	private Map<String,Integer> quizRoomScores;
-	
+	private Map<String,Integer> privateQuizRoomScores;
+	private Map<String,Integer> publicCategoryScores;
 	
 	public Player(String userName, String password,String name,String emailId) {
 		//TODO  default photoURL
@@ -33,14 +33,6 @@ public class Player {
 		this.details = details;
 	}
 
-	public Map<String, Integer> getQuizRoomScores() {
-		return quizRoomScores;
-	}
-
-	public void setQuizRoomScores(Map<String, Integer> quizRoomScores) {
-		this.quizRoomScores = quizRoomScores;
-	}
-
 	public Player(String userName, String password,String name,String emailId,String photoURL) {
 		super();
 		details= new PlayerPersonalDetails(photoURL,name,emailId);
@@ -55,7 +47,7 @@ public class Player {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+	/*
 	public int increaseScore(String quizRoomName , int increment){
 		int initialScore=0;
 		if(quizRoomScores.containsKey(quizRoomName)){
@@ -64,6 +56,22 @@ public class Player {
 		int newscore = initialScore+increment;
 		quizRoomScores.put(quizRoomName, newscore);
 		return newscore;
+	}*/
+
+	public Map<String,Integer> getPrivateQuizRoomScores() {
+		return privateQuizRoomScores;
+	}
+
+	public void setPrivateQuizRoomScores(Map<String,Integer> privateQuizRoomScores) {
+		this.privateQuizRoomScores = privateQuizRoomScores;
+	}
+
+	public Map<String,Integer> getPublicCategoryScores() {
+		return publicCategoryScores;
+	}
+
+	public void setPublicCategoryScores(Map<String,Integer> publicCategoryScores) {
+		this.publicCategoryScores = publicCategoryScores;
 	}
 
 	public class PlayerPersonalDetails{

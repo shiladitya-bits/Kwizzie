@@ -1,10 +1,12 @@
 package com.kwizzie.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -41,4 +43,20 @@ public class PrivateQuizFinishActivity extends Activity {
 		return true;
 	}
 
+	public void onClickBtn(View v){
+		switch(v.getId()){
+		case R.id.leaderboardBtn:
+			Intent i = new Intent(this, LeaderBoardActivity.class);
+			i.putExtra("roomID", quizRoomID);
+			startActivity(i);
+			finish();
+			break;
+		case R.id.leaveRoomBtn:
+			Intent i2 = new Intent(this, JoinQuizRoomActivity.class);
+			startActivity(i2);
+			finish();
+			break;
+		}
+		
+	}
 }

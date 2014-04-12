@@ -39,7 +39,8 @@ public class JoinQuizRoomActivity extends Activity {
 			startActivity(intent);
 			break;
 		case R.id.publicQuizRoomB :
-			
+			Intent intent1 = new Intent(this,PublicQuizRoomActivity.class);
+			startActivity(intent1);
 			break;
 		}
 	}

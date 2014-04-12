@@ -20,18 +20,22 @@
         />
     
     <Button 
+        android:id="@+id/leaderboardBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_rounded"
 		android:text="View LeaderBoard"
 		android:layout_margin="20dp"
+		android:onClick="onClickBtn"
         />
     <Button 
+        android:id="@+id/leaveRoomBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_rounded"
 		android:text="Leave Quiz Room"
 		android:layout_margin="20dp"
+		android:onClick="onClickBtn"
         />
 
 </LinearLayout>

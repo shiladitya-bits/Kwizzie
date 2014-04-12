@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100"
+    android:background="@color/app_background"
     
  >
  <include layout="@layout/join_quizroom_header_layout"/>

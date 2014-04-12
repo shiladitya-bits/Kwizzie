@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:background="@color/list_item_background"
+    
+    >
+    <LinearLayout 
+         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+       	android:weightSum="100"
+       	android:layout_weight="30"
+       	android:paddingTop="5dp"
+       	android:paddingBottom="5dp"
+         >
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_weight="70"
+        
+        />
+
+    <TextView 
+        android:id="@+id/playerNameTv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="30"
+        android:text="Rahul Dravid"
+        android:layout_gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        />
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/playerScoreTv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+       	android:layout_weight="70"
+       	android:layout_gravity="center_vertical"
+       	android:text="20"
+       	android:textColor="@android:color/white"
+       	android:textSize="20sp"
+       	android:gravity="right"
+       	android:paddingRight="15dp"
+       	/>
+</LinearLayout>
