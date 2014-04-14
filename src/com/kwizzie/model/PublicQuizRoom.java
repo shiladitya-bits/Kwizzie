@@ -6,13 +6,14 @@ import java.util.Map;
 public class PublicQuizRoom extends QuizRoom{
 
 	private Map<QuestionCategory,List<Question>> categoryQuestionMap;
+	
+	public PublicQuizRoom(){}
+	
 	public PublicQuizRoom(
 			Map<QuestionCategory, List<Question>> categoryQuestionMap,
-			LeaderBoard leaderBoard, String description, String roomName,
-			String roomID) {
+			String description, String roomName, String roomID) {
 		super();
 		this.categoryQuestionMap = categoryQuestionMap;
-		this.leaderBoard = leaderBoard;
 		this.description = description;
 		this.roomName = roomName;
 		this.roomID = roomID;

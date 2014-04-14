@@ -9,8 +9,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.kwizzie.model.Player;
+
+import flexjson.JSONDeserializer;
 
 public class PrivateQuizFinishActivity extends Activity {
 
@@ -27,13 +28,12 @@ public class PrivateQuizFinishActivity extends Activity {
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
 		SharedPreferences  pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		Gson gson = new Gson();
 	    String json = pref.getString("player", "");
-	    player = gson.fromJson(json, Player.class);
+	    JSONDeserializer<Player> des = new JSONDeserializer<Player>();
+	    player = des.deserialize(json);
 	    //TODO backend call player  , quiz room nid , score
 	    TextView scoreTv = (TextView) findViewById(R.id.finalScoreTv);
 	    scoreTv.setText("You scored "+playerScore);
-	    
 	}
 
 	@Override

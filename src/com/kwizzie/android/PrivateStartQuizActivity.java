@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
-import com.google.gson.Gson;
 import com.kwizzie.model.AudioQuestion;
 import com.kwizzie.model.MCQAnswerType;
 import com.kwizzie.model.PictureQuestion;
@@ -25,7 +24,6 @@ import com.kwizzie.model.VideoQuestion;
 public class PrivateStartQuizActivity extends Activity {
 	
 	ArrayList<Question> questions;
-	Gson gson = new Gson();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,7 @@ public class PrivateStartQuizActivity extends Activity {
 		questions.add(ques3);
 		questions.add(ques4);
 		
-		QuizRoom quizRoom = new PrivateQuizRoom(questions, null, null, "Bits Quiz Room", "bits123");
+		QuizRoom quizRoom = new PrivateQuizRoom(questions, null, null, "Bits Quiz Room");
 		Intent intent = new Intent(this,QuestionType.valueOf(questions.get(0).getTypeOfQuestion()).getQuestionType());
 		intent.putExtra("questionNumber",0);
 		intent.putParcelableArrayListExtra("questions", questions);

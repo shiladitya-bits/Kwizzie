@@ -8,16 +8,19 @@ public class QuestionCategory  implements Parcelable{
     private String categoryCode;
     private String categoryName;
     
-    public QuestionCategory(){
-        
-    }
+    public QuestionCategory(){ }
     
     public QuestionCategory(String categoryCode, String categoryName){
         this.categoryCode = categoryCode;
         this.categoryName = categoryName;
     }
     
-    public String getCategoryCode() {
+    public QuestionCategory(Parcel source) {
+    	this.categoryCode = source.readString();
+    	this.categoryName = source.readString();
+    }
+
+	public String getCategoryCode() {
         return categoryCode;
     }
     public void setCategoryCode(String categoryCode) {
@@ -41,4 +44,17 @@ public class QuestionCategory  implements Parcelable{
 		dest.writeString(categoryName);
 		
 	}
+	public static final Parcelable.Creator<QuestionCategory> CREATOR = new Parcelable.Creator<QuestionCategory>() {
+
+		@Override
+		public QuestionCategory createFromParcel(Parcel source) {
+			return new QuestionCategory(source);
+		}
+
+		@Override
+		public QuestionCategory[] newArray(int size) {
+			return new QuestionCategory[size];
+		}
+	};
+	
 }

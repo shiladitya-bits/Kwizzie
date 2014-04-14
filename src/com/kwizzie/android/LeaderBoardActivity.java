@@ -25,6 +25,9 @@ public class LeaderBoardActivity extends Activity {
 		Leader lead1 = new Leader("name","username1",10,"http://media1.santabanta.com/full1/Cricket/Rahul%20Dravid/rah16a.jpg");
 		Leader lead2 = new Leader("name123","username2",50,"http://media1.santabanta.com/full1/Cricket/Rahul%20Dravid/rah16a.jpg");
 		Leader lead3 = new Leader("name234454","username3",110,"http://media1.santabanta.com/full1/Cricket/Rahul%20Dravid/rah16a.jpg");
+		leaders.add(lead1);
+		leaders.add(lead2);
+		leaders.add(lead3);
 		LeaderBoardAdapter adapter = new LeaderBoardAdapter(this, leaders,roomID);
 		leaderboardList.setAdapter(adapter);
 	}

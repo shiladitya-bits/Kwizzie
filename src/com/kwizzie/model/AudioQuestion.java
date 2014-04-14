@@ -6,6 +6,9 @@ import android.os.Parcelable;
 public class AudioQuestion extends Question implements Parcelable{
 
 	private String audioURL;
+	
+	public AudioQuestion(){}
+	
 	public AudioQuestion(String audioURL, QuestionLocation location,
 			QuestionCategory category, String questionTitle,
 			AnswerType answerType, boolean isLocked) {

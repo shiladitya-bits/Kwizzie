@@ -31,8 +31,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
 import com.kwizzie.model.Player;
+
+import flexjson.JSONSerializer;
 
 public class LoginActivity extends Activity {
 
@@ -64,8 +65,8 @@ public class LoginActivity extends Activity {
 			
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			Editor prefEditor =  pref.edit();
-			Gson gson = new Gson();
-			String jsonPlayer = gson.toJson(player);
+			JSONSerializer ser = new JSONSerializer();
+			String jsonPlayer = ser.deepSerialize(player);
 			prefEditor.putString("player", jsonPlayer);
 			prefEditor.commit();
 			if(isNetworkAvailable()){

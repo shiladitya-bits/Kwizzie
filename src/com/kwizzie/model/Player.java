@@ -15,6 +15,8 @@ public class Player implements Parcelable{
 	private Map<String,Integer> privateQuizRoomScores;
 	private Map<String,Integer> publicCategoryScores;
 	
+	public Player(){}
+	
 	public Player(String userName, String password,String name,String emailId) {
 		//TODO  default photoURL
 		details= new PlayerPersonalDetails("",name,emailId);

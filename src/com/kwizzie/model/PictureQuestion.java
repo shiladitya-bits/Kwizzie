@@ -1,5 +1,8 @@
 package com.kwizzie.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,6 +10,8 @@ public class PictureQuestion extends Question {
 
 	private String pictureURL;
 
+	public PictureQuestion(){}
+	
 	public PictureQuestion(String pictureURL, QuestionLocation location,
 			QuestionCategory category, String questionTitle,
 			AnswerType answerType, boolean isLocked) {
@@ -20,6 +25,15 @@ public class PictureQuestion extends Question {
 		typeOfQuestion="PICTURE_QUESTION";
 	}
 
+//	public PictureQuestion(JSONObject obj){
+//		try {
+//			this.pictureURL = obj.getString("pictureURL");
+//			this.location = new QuestionLocation();
+//		} catch (JSONException e) {
+//			
+//			e.printStackTrace();
+//		}
+//	}
 	public PictureQuestion(Parcel source){
 		questionTitle = source.readString();
 		pictureURL = source.readString();

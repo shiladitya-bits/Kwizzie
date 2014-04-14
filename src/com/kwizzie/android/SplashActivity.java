@@ -23,11 +23,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.kwizzie.model.PrivateQuizRoom;
+
+import flexjson.JSONDeserializer;
 
 public class SplashActivity extends Activity {
 
+	PrivateQuizRoom quizRoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +89,22 @@ public class SplashActivity extends Activity {
 			if(result != null){
 				Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
 				try{
-					Gson gson = new Gson();
-					PrivateQuizRoom room = gson.fromJson(result, PrivateQuizRoom.class);
+					JSONDeserializer<PrivateQuizRoom> des = new JSONDeserializer<PrivateQuizRoom>();
+					PrivateQuizRoom room = des.deserialize(response);
+/*					Gson gson = new Gson();
+					JSONObject quizRoomJson = new JSONObject(response);
+					JSONArray questionList = quizRoomJson.getJSONArray("questions");
+					List<Question> list = new ArrayList<Question>();
+					int len = questionList.length();
+					for(int i=0;i<len;i++){
+						JSONObject qs = questionList.getJSONObject(i);
+						String qsType = qs.getString("typeOfQuestion");
+//						list.add(gson.fromJson(qs.toString(), 
+//								QuestionType.valueOf(qsType).getModelClass()));
+						
+					}
+					quizRoom = new PrivateQuizRoom(list, quizRoomJson.getString("description"), 
+							quizRoomJson.getString("roomName"), quizRoomJson.getString("roomID"));*/
 				} catch(Exception e){
 					e.printStackTrace();
 				}

@@ -39,6 +39,8 @@ public class MCQAnswerType implements AnswerType {
 		this.correctOptionIndex = correctOptionIndex;
 	}
 
+	public MCQAnswerType(){}
+	
 	public MCQAnswerType(List<String> options, int correctOption, EvaluateAnswer obj){
 		this.options = options;
 		this.correctOptionIndex=correctOption;

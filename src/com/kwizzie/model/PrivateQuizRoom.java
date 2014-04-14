@@ -7,13 +7,13 @@ public class PrivateQuizRoom extends QuizRoom{
 
 	
 	private List<Question> questions;
-	private String securityKey;
 
-	public PrivateQuizRoom(List<Question> questions, LeaderBoard leaderBoard,
+	public PrivateQuizRoom(){}
+	
+	public PrivateQuizRoom(List<Question> questions,
 			String description, String roomName, String roomID) {
 		super();
 		this.questions = questions;
-		this.leaderBoard = leaderBoard;
 		this.description = description;
 		this.roomName = roomName;
 		this.roomID = roomID;
@@ -26,13 +26,4 @@ public class PrivateQuizRoom extends QuizRoom{
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
-
-	public String getSecurityKey() {
-		return securityKey;
-	}
-
-	public void setSecurityKey(String securityKey) {
-		this.securityKey = securityKey;
-	}
-	
 }

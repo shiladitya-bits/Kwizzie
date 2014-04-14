@@ -9,7 +9,7 @@ public class QRAnswerType implements AnswerType {
 
 	private String answer;
 	
-	
+	public QRAnswerType(){}
 	public QRAnswerType(String answer, EvaluateAnswer evaluateAns) {
 		super();
 		this.answer = answer;

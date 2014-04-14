@@ -11,10 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.kwizzie.android.R.id;
 import com.kwizzie.model.EvaluateAnswer;
-import com.kwizzie.model.PublicQuizRoom;
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionType;
 import com.kwizzie.model.TextQuestion;

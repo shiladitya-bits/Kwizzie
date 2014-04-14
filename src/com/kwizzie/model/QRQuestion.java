@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 public class QRQuestion extends Question{
 
+	public QRQuestion(){}
+	
 	public QRQuestion( QuestionLocation location,
 			QuestionCategory category, String questionTitle,
 			AnswerType answerType, boolean isLocked) {

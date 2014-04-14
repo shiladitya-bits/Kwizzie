@@ -6,6 +6,7 @@ public class LeaderBoard {
 	private List<Leader> leaders;
 	private String quizRoomCode;
 	
+	public LeaderBoard(){}
 	
 	public LeaderBoard(List<Leader> leaders, String quizRoomCode) {
 		super();
