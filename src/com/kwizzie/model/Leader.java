@@ -5,6 +5,9 @@ public class Leader {
 	private	String username;
 	private int score;
 	private String photoURL;
+	
+	public Leader(){}
+	
 	public Leader(String name, String username, int score, String photoURL) {
 		super();
 		this.name = name;

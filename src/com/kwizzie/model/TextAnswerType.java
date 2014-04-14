@@ -14,7 +14,8 @@ public class TextAnswerType implements AnswerType {
 	private String correctAnswer;
 	EvaluateAnswer evalAns;
 
-
+	public TextAnswerType(){}
+	
 	public TextAnswerType(Parcel source){
 		correctAnswer = source.readString();
 	}

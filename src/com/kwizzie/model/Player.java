@@ -97,6 +97,8 @@ public class Player implements Parcelable{
 		public String getPhotoUrl() {
 			return photoUrl;
 		}
+		public PlayerPersonalDetails(){}
+		
 		public PlayerPersonalDetails(String photoUrl, String name,
 				String emailId) {
 			this.photoUrl = photoUrl;

@@ -34,9 +34,9 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if(isNetworkAvailable()){
-        	new DownloadData(this).execute();
-        }
+//        if(isNetworkAvailable()){
+//        	new DownloadData(this).execute();
+//        }
     }
 
 
@@ -63,93 +63,4 @@ public class SplashActivity extends Activity {
     	
     }
     
-	public boolean isNetworkAvailable() 
-	{
-        ConnectivityManager cm = (ConnectivityManager) 
-          getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        // if no network is available networkInfo will be null
-        // otherwise check if we are connected
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        }
-        return false;
-    }
-	
-	private class DownloadData extends AsyncTask<String, Void, String> {
-		public static final String SERVER_URL = "http://10.20.1.215:8080/KwizzieServer/kwizzie/quizRoom/private?roomId=bits123&key=bitsbpgccafe";
-		String response;
-		Activity activity;
-		public DownloadData(Activity activity){
-			this.activity = activity;
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			if(result != null){
-				Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
-				try{
-					JSONDeserializer<PrivateQuizRoom> des = new JSONDeserializer<PrivateQuizRoom>();
-					PrivateQuizRoom room = des.deserialize(response);
-/*					Gson gson = new Gson();
-					JSONObject quizRoomJson = new JSONObject(response);
-					JSONArray questionList = quizRoomJson.getJSONArray("questions");
-					List<Question> list = new ArrayList<Question>();
-					int len = questionList.length();
-					for(int i=0;i<len;i++){
-						JSONObject qs = questionList.getJSONObject(i);
-						String qsType = qs.getString("typeOfQuestion");
-//						list.add(gson.fromJson(qs.toString(), 
-//								QuestionType.valueOf(qsType).getModelClass()));
-						
-					}
-					quizRoom = new PrivateQuizRoom(list, quizRoomJson.getString("description"), 
-							quizRoomJson.getString("roomName"), quizRoomJson.getString("roomID"));*/
-				} catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {		}
-
-		@Override
-		protected String doInBackground(String... arg0) {
-			try{
-				
-				String getURL = SERVER_URL;
-				Log.i("server url",getURL);
-				
-				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//				nameValuePairs.add(new BasicNameValuePair("flag", "transaction"));
-				
-				// POST REQUEST
-//				HttpClient httpclient = new DefaultHttpClient();				
-//				HttpPost httppost = new HttpPost(getURL);
-//				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//				HttpResponse httpResponse = httpclient.execute(httppost);
-//				HttpEntity resEntityGet = httpResponse.getEntity();  
-		
-				//GET REQUEST
-				HttpClient client = new DefaultHttpClient();  
-				HttpGet get = new HttpGet(getURL);
-		        HttpResponse responseGet = client.execute(get);  
-		        HttpEntity resEntityGet = responseGet.getEntity();
-		        
-				if (resEntityGet != null) 
-		        {  
-					response = EntityUtils.toString(resEntityGet);
-		            Log.d("response", response);	             
-					return response;
-		        }
-				else return null;
-			}
-			catch(Exception e){
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-	}
 }

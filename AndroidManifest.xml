@@ -115,6 +115,10 @@
             android:name="com.kwizzie.android.UserProfileActivity"
             android:label="@string/title_activity_user_profile" >
         </activity>
+        <activity
+            android:name="com.kwizzie.android.PrivateJoinQuizActivity"
+            android:label="@string/title_activity_private_join_quiz" >
+        </activity>
     </application>
 
 </manifest>

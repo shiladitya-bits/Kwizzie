@@ -7,6 +7,8 @@ public class TextQuestion extends Question{
 
 	private String subTitle;
 
+	public TextQuestion(){}
+	
 	public TextQuestion(String subTitle, QuestionLocation location,
 			QuestionCategory category, String questionTitle,
 			AnswerType answerType, boolean isLocked) {

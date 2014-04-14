@@ -6,6 +6,9 @@ import android.os.Parcelable;
 public class VideoQuestion extends Question implements Parcelable{
 
 	private String videoURL;
+
+	public VideoQuestion(){}
+	
 	public VideoQuestion(String videoURL, QuestionLocation location,
 			QuestionCategory category, String questionTitle,
 			AnswerType answerType, boolean isLocked) {
