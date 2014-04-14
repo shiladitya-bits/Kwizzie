@@ -154,22 +154,23 @@ public final class R {
         public static final int activity_registration_complete=0x7f03000a;
         public static final int activity_splash=0x7f03000b;
         public static final int activity_text_question=0x7f03000c;
-        public static final int activity_video_question=0x7f03000d;
-        public static final int app_picker_list_item=0x7f03000e;
-        public static final int bookmark_picker_list_item=0x7f03000f;
-        public static final int capture=0x7f030010;
-        public static final int category_list_row_layout=0x7f030011;
-        public static final int encode=0x7f030012;
-        public static final int help=0x7f030013;
-        public static final int history_list_item=0x7f030014;
-        public static final int join_quizroom_header_layout=0x7f030015;
-        public static final int leaderboard_row_layout=0x7f030016;
-        public static final int question_header_layout=0x7f030017;
-        public static final int search_book_contents=0x7f030018;
-        public static final int search_book_contents_header=0x7f030019;
-        public static final int search_book_contents_list_item=0x7f03001a;
-        public static final int share=0x7f03001b;
-        public static final int text_answer_layout=0x7f03001c;
+        public static final int activity_user_profile=0x7f03000d;
+        public static final int activity_video_question=0x7f03000e;
+        public static final int app_picker_list_item=0x7f03000f;
+        public static final int bookmark_picker_list_item=0x7f030010;
+        public static final int capture=0x7f030011;
+        public static final int category_list_row_layout=0x7f030012;
+        public static final int encode=0x7f030013;
+        public static final int help=0x7f030014;
+        public static final int history_list_item=0x7f030015;
+        public static final int join_quizroom_header_layout=0x7f030016;
+        public static final int leaderboard_row_layout=0x7f030017;
+        public static final int question_header_layout=0x7f030018;
+        public static final int search_book_contents=0x7f030019;
+        public static final int search_book_contents_header=0x7f03001a;
+        public static final int search_book_contents_list_item=0x7f03001b;
+        public static final int share=0x7f03001c;
+        public static final int text_answer_layout=0x7f03001d;
     }
     public static final class menu {
         public static final int audio=0x7f0c0000;
@@ -190,7 +191,8 @@ public final class R {
         public static final int registration_complete=0x7f0c000f;
         public static final int splash=0x7f0c0010;
         public static final int text_question=0x7f0c0011;
-        public static final int video_question=0x7f0c0012;
+        public static final int user_profile=0x7f0c0012;
+        public static final int video_question=0x7f0c0013;
     }
     public static final class raw {
         public static final int beep=0x7f050000;
@@ -328,6 +330,7 @@ public final class R {
         public static final int title_activity_registration=0x7f0a0078;
         public static final int title_activity_registration_complete=0x7f0a0079;
         public static final int title_activity_text_question=0x7f0a007d;
+        public static final int title_activity_user_profile=0x7f0a0088;
         public static final int title_activity_video_question=0x7f0a007e;
         public static final int wifi_changing_network=0x7f0a0073;
         public static final int wifi_ssid_label=0x7f0a0074;

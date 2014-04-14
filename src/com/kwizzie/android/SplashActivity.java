@@ -32,7 +32,9 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //new DownloadData(this).execute();
+        if(isNetworkAvailable()){
+        	new DownloadData(this).execute();
+        }
     }
 
 
@@ -73,7 +75,7 @@ public class SplashActivity extends Activity {
     }
 	
 	private class DownloadData extends AsyncTask<String, Void, String> {
-		public static final String SERVER_URL = "http://192.168.42.99:8080/KwizzieServer/kwizzie/quizRoom/private?roomId=bits123&key=bitsbpgccafe";
+		public static final String SERVER_URL = "http://10.20.1.215:8080/KwizzieServer/kwizzie/quizRoom/private?roomId=bits123&key=bitsbpgccafe";
 		String response;
 		Activity activity;
 		public DownloadData(Activity activity){

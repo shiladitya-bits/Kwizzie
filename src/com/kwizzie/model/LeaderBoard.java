@@ -3,19 +3,19 @@ package com.kwizzie.model;
 import java.util.List;
 
 public class LeaderBoard {
-	private List<Player> leaders;
+	private List<Leader> leaders;
 	private String quizRoomCode;
 	
 	
-	public LeaderBoard(List<Player> leaders, String quizRoomCode) {
+	public LeaderBoard(List<Leader> leaders, String quizRoomCode) {
 		super();
 		this.leaders = leaders;
 		this.quizRoomCode = quizRoomCode;
 	}
-	public List<Player> getLeaders() {
+	public List<Leader> getLeaders() {
 		return leaders;
 	}
-	public void setLeaders(List<Player> leaders) {
+	public void setLeaders(List<Leader> leaders) {
 		this.leaders = leaders;
 	}
 	public String getQuizRoomCode() {

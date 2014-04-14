@@ -27,7 +27,7 @@
             android:name="com.kwizzie.android.SplashActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
-            >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -110,6 +110,10 @@
         <activity
             android:name="com.kwizzie.android.PublicQuizRoomActivity"
             android:label="@string/title_activity_public_quiz_room" >
+        </activity>
+        <activity
+            android:name="com.kwizzie.android.UserProfileActivity"
+            android:label="@string/title_activity_user_profile" >
         </activity>
     </application>
 

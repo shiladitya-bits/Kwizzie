@@ -1,8 +1,13 @@
 package com.kwizzie.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Player implements Parcelable{
 
 	private String userName;
 	private String password;
@@ -17,6 +22,15 @@ public class Player {
 		this.password = password;
 	}
 	
+	public Player(Parcel source){
+		userName = source.readString();
+		password = source.readString();
+		details = source.readParcelable(PlayerPersonalDetails.class.getClassLoader());
+		privateQuizRoomScores = source.readHashMap(HashMap.class.getClassLoader());
+		publicCategoryScores = source.readHashMap(HashMap.class.getClassLoader());
+		
+		//http://stackoverflow.com/questions/10757598/what-classloader-to-use-with-parcel-readhashmap
+	}
 	public String getUserName() {
 		return userName;
 	}
@@ -74,7 +88,7 @@ public class Player {
 		this.publicCategoryScores = publicCategoryScores;
 	}
 
-	public class PlayerPersonalDetails{
+	public class PlayerPersonalDetails implements Parcelable{
 		private String photoUrl;
 		private String name;
 		private String emailId;
@@ -86,6 +100,13 @@ public class Player {
 			this.photoUrl = photoUrl;
 			this.setName(name);
 			this.emailId = emailId;
+		}
+		
+		public PlayerPersonalDetails(Parcel source){
+			name = source.readString();
+			emailId = source.readString();
+			photoUrl = source.readString();
+				
 		}
 		public void setPhotoUrl(String photoUrl) {
 			this.photoUrl = photoUrl;
@@ -102,8 +123,33 @@ public class Player {
 		public void setName(String name) {
 			this.name = name;
 		}
+		@Override
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeString(name);
+			dest.writeString(emailId);
+			dest.writeString(photoUrl);			
+		}
 	
 		
+	}
+
+	@Override
+	public int describeContents() {
+		return hashCode();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(userName);
+		dest.writeString(password); 
+		dest.writeParcelable(details , flags);
+		dest.writeMap(privateQuizRoomScores);
+		dest.writeMap(publicCategoryScores);
 	}
 	
 	

@@ -162,6 +162,9 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
+			if(result == null){
+				imageBitmap = BitmapFactory.decodeResource(LoginActivity.this.getResources(), R.drawable.ic_launcher);
+			}
 			saveImage();
 		}
 

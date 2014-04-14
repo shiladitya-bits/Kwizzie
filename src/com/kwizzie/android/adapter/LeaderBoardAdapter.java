@@ -3,30 +3,30 @@ package com.kwizzie.android.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.zxing.oned.rss.FinderPattern;
 import com.kwizzie.android.R;
-import com.kwizzie.android.adapter.CategoryListAdapter.CategoryItemHolder;
+import com.kwizzie.android.UserProfileActivity;
+import com.kwizzie.model.Leader;
 import com.kwizzie.model.Player;
 
-public class LeaderBoardAdapter extends ArrayAdapter<Player>{
+public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 
 	Context context;
-	List<Player> players; 
+	List<Leader> leaders; 
 	String roomID;
 	
 	public LeaderBoardAdapter(Context context,
-			List<Player> objects, String roomID) {
+			List<Leader> objects, String roomID) {
 		super(context, R.layout.leaderboard_row_layout, objects);
 		this.context=context;
-		this.players = objects;
+		this.leaders = objects;
 	}
 	
 	@Override
@@ -38,23 +38,32 @@ public class LeaderBoardAdapter extends ArrayAdapter<Player>{
 			LeaderboardItemHolder leaderHolder = new LeaderboardItemHolder();
 			leaderHolder.setPlayerName((TextView)rowView.findViewById(R.id.playerNameTv));
 			leaderHolder.setPlayerScore((TextView)rowView.findViewById(R.id.playerScoreTv));
-			Button startBtn = (Button)rowView.findViewById(R.id.startQuizB);
-			startBtn.setOnClickListener(new View.OnClickListener() {
+			leaderHolder.setProfileImage((ImageView)rowView.findViewById(R.id.profile_pic_imageview));
+			
+			rowView.setTag(leaderHolder);
+			rowView.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
-				public void onClick(View arg0) {
-					
+				public void onClick(View v) {
+					Leader leader = leaders.get(position);
+					String username = leader.getUsername();
+					//TODO Server call to get player using username
+					Player player = new Player("dravid123","Dravids","Rahul Dravid","dravid@gmail.com");
+					Intent intent = new Intent(context,UserProfileActivity.class);
+					intent.putExtra("player", player);
+					context.startActivity(intent);
 				}
 			});
-			rowView.setTag(leaderHolder);
 		}
 		LeaderboardItemHolder holder =(LeaderboardItemHolder) rowView.getTag();
-		holder.getPlayerName().setText(players.get(position).getUserName());
+		holder.getPlayerName().setText(leaders.get(position).getUsername());
 		//holder.getPlayerScore().setText(players.get(position));
 		return rowView;
 		
+		
 	}
 
+	
 	static class LeaderboardItemHolder{
 		private TextView playerName;
 		private TextView playerScore;

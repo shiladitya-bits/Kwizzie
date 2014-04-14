@@ -20,5 +20,6 @@
     <string name="title_activity_join_quiz_room">Home</string>
     <string name="title_activity_leader_board">Leaderboard</string>
     <string name="title_activity_public_quiz_room">Choose Category</string>
+    <string name="title_activity_user_profile">UserProfileActivity</string>
 
 </resources>
