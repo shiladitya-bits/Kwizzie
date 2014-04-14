@@ -8,18 +8,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:ontext=".PrivateJoinQuizActivity" 
     android:orientation="vertical"
+    android:background="@color/app_background"
     >
 
    <EditText
-        android:id="@+id/etRoomName"
+        android:id="@+id/etRoomId"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Room Name"
+        android:hint="Room ID"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        
+		android:textColor="@android:color/white"        
         android:ems="10" >
-
         <requestFocus />
     </EditText>
     
@@ -28,9 +28,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+		android:textColor="@android:color/white"
         android:hint="Security key"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:inputType="textPassword" />
 
-    
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Join Room"
+        android:id="@+id/btnStartQuiz"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="onBtnClick"
+        android:background="@drawable/button_rounded"
+        />
 </LinearLayout>

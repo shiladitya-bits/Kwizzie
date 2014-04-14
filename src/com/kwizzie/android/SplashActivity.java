@@ -34,9 +34,6 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-//        if(isNetworkAvailable()){
-//        	new DownloadData(this).execute();
-//        }
     }
 
 
@@ -57,10 +54,6 @@ public class SplashActivity extends Activity {
     		Intent intentSignUp = new Intent(this,RegistrationActivity.class);
     		startActivity(intentSignUp);
     	break;	
-    	
-    	
     	}
-    	
     }
-    
 }

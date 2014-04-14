@@ -35,7 +35,7 @@ public class JoinQuizRoomActivity extends Activity {
 	public void onBtnClick(View v){
 		switch(v.getId()){
 		case R.id.privateQuizRoomB :
-			Intent intent = new Intent(this,PrivateStartQuizActivity.class);
+			Intent intent = new Intent(this,PrivateJoinQuizActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.publicQuizRoomB :
