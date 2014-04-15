@@ -4,6 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:weightSum="100"
+    android:background="@color/app_background"
     >
 
     <EditText
@@ -14,6 +15,7 @@
         android:ems="20"
         android:layout_weight="10"
         android:layout_margin="10dp"
+        android:textColor="@android:color/white"
         />
     <EditText
         android:id="@+id/usernameText"
@@ -22,7 +24,9 @@
         android:hint="username" 
         android:ems="20"
         android:layout_weight="10"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:textColor="@android:color/white"
+        />
     <EditText
         android:id="@+id/emailText"
         android:inputType="textEmailAddress"
@@ -31,7 +35,9 @@
         android:hint="email ID" 
         android:ems="20"
         android:layout_weight="10"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:textColor="@android:color/white"
+        />
     <EditText
         android:id="@+id/passwordText"
         android:layout_width="wrap_content"
@@ -40,7 +46,9 @@
         android:ems="20"
         android:layout_weight="10"
         android:layout_margin="10dp"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:textColor="@android:color/white"
+        />
     <EditText
         android:id="@+id/retypePasswordText"
         android:layout_width="wrap_content"
@@ -49,18 +57,23 @@
         android:ems="20"
         android:layout_weight="10"
         android:layout_margin="10dp"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:textColor="@android:color/white"
+        />
     
     <Button 
         android:id="@+id/signUpB"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_rounded"
         android:layout_gravity="center"
         android:text="Sign Up"
+        android:onClick="onBtnClick"
+        android:textColor="@android:color/white"
         />
     
 

@@ -23,15 +23,11 @@ public class Player implements Parcelable{
 		this.userName = userName;
 		this.password = password;
 	}
-	
 	public Player(Parcel source){
 		userName = source.readString();
-		password = source.readString();
-		details = source.readParcelable(PlayerPersonalDetails.class.getClassLoader());
-		privateQuizRoomScores = source.readHashMap(HashMap.class.getClassLoader());
-		publicCategoryScores = source.readHashMap(HashMap.class.getClassLoader());
-		
-		//http://stackoverflow.com/questions/10757598/what-classloader-to-use-with-parcel-readhashmap
+		details = source.readParcelable(PlayerPersonalDetails.class.getClassLoader());		
+		source.readMap(privateQuizRoomScores, HashMap.class.getClassLoader());
+		source.readMap(publicCategoryScores, HashMap.class.getClassLoader());
 	}
 	public String getUserName() {
 		return userName;
@@ -56,6 +52,10 @@ public class Player implements Parcelable{
 		this.password = password;
 	}
 
+	public Player(Player source){
+		
+		
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -90,58 +90,6 @@ public class Player implements Parcelable{
 		this.publicCategoryScores = publicCategoryScores;
 	}
 
-	public class PlayerPersonalDetails implements Parcelable{
-		private String photoUrl;
-		private String name;
-		private String emailId;
-		public String getPhotoUrl() {
-			return photoUrl;
-		}
-		public PlayerPersonalDetails(){}
-		
-		public PlayerPersonalDetails(String photoUrl, String name,
-				String emailId) {
-			this.photoUrl = photoUrl;
-			this.setName(name);
-			this.emailId = emailId;
-		}
-		
-		public PlayerPersonalDetails(Parcel source){
-			name = source.readString();
-			emailId = source.readString();
-			photoUrl = source.readString();
-				
-		}
-		public void setPhotoUrl(String photoUrl) {
-			this.photoUrl = photoUrl;
-		}
-		public String getEmailId() {
-			return emailId;
-		}
-		public void setEmailId(String emailId) {
-			this.emailId = emailId;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		@Override
-		public int describeContents() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-		@Override
-		public void writeToParcel(Parcel dest, int flags) {
-			dest.writeString(name);
-			dest.writeString(emailId);
-			dest.writeString(photoUrl);			
-		}
-	
-		
-	}
-
 	@Override
 	public int describeContents() {
 		return hashCode();
@@ -150,11 +98,23 @@ public class Player implements Parcelable{
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(userName);
-		dest.writeString(password); 
-		dest.writeParcelable(details , flags);
+		dest.writeParcelable(details, flags);
 		dest.writeMap(privateQuizRoomScores);
 		dest.writeMap(publicCategoryScores);
 	}
+	public static final Parcelable.Creator<Player> CREATOR = new Parcelable.Creator<Player>() {
+
+		@Override
+		public Player createFromParcel(Parcel source) {
+			return new Player(source);
+		}
+
+		@Override
+		public Player[] newArray(int size) {
+			return new Player[size];
+		}
 	
+	
+	};
 	
 }

@@ -3,6 +3,17 @@ package com.kwizzie.android;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -25,6 +36,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +45,7 @@ import android.widget.EditText;
 
 import com.kwizzie.model.Player;
 
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 public class LoginActivity extends Activity {
@@ -42,6 +55,7 @@ public class LoginActivity extends Activity {
 	Button loginB;
 	Player player;
 	Bitmap imageBitmap; 
+	String response;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +74,8 @@ public class LoginActivity extends Activity {
 			String username = usernameText.getText().toString();
 			String password = passwordText.getText().toString();
 
-			//TODO get Player object using username from db(after authenticate)
-			player = new Player(username , password , "Rahul Dravid","dravid@gmail.com","http://www.thehindu.com/multimedia/dynamic/00788/RAHUL_DRAVID_788755e.jpg");
-			
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			Editor prefEditor =  pref.edit();
-			JSONSerializer ser = new JSONSerializer();
-			String jsonPlayer = ser.deepSerialize(player);
-			prefEditor.putString("player", jsonPlayer);
-			prefEditor.commit();
 			if(isNetworkAvailable()){
-				new DownloadImageTask().execute(player.getDetails().getPhotoUrl());	
+					new DownloadData().execute(username , password);
 			} else {
 				new AlertDialog.Builder(LoginActivity.this).setMessage("Can not connect to network. Please check your data connection.")
 				.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
@@ -208,4 +213,66 @@ public class LoginActivity extends Activity {
         }
         return false;
     }
+	
+	private class DownloadData extends AsyncTask<String, Void, String> {
+
+		public DownloadData(){
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			JSONDeserializer<Player> deserializer  = new JSONDeserializer<Player>();
+			player = deserializer.deserialize(result);
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			Editor prefEditor =  pref.edit();
+			JSONSerializer ser = new JSONSerializer();
+			String jsonPlayer = ser.deepSerialize(player);
+			prefEditor.putString("player", jsonPlayer);
+			prefEditor.commit();
+			new DownloadImageTask().execute(player.getDetails().getPhotoUrl());
+		}
+
+		@Override
+		protected void onPreExecute() {		}
+
+		@Override
+		protected String doInBackground(String... args) {
+			try{
+				
+				String getURL = KwizzieConsts.SERVER_URL+"player";
+				String  username = args[0];
+				String password = args[1];
+				Log.i("server url",getURL);
+				
+				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+				nameValuePairs.add(new BasicNameValuePair("username", username));
+				nameValuePairs.add(new BasicNameValuePair("password",password));
+				
+				// POST REQUEST
+				HttpClient httpclient = new DefaultHttpClient();				
+				HttpPost httppost = new HttpPost(getURL);
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				HttpResponse httpResponse = httpclient.execute(httppost);
+				HttpEntity resEntityGet = httpResponse.getEntity();  
+	
+				/*//GET REQUEST
+				HttpClient client = new DefaultHttpClient();  
+				HttpGet get = new HttpGet(getURL);
+		        HttpResponse responseGet = client.execute(get);  
+		        HttpEntity resEntityGet = responseGet.getEntity();
+		        			*/
+			if (resEntityGet != null) 
+	        {  
+				response = EntityUtils.toString(resEntityGet);
+	            Log.d("response", response);	             
+				return response;
+	        }
+			else return null;
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+		
+	}
 }

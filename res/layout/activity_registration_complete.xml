@@ -3,25 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="100"
+    android:background="@color/app_background"
  >
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/thumbs_up"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp" 
+        android:layout_marginTop="10dp"
+        android:layout_weight="50" 
        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You have successfully created an account on Kwizzie"
+        android:text="You have successfully created an account on Kwizzie !"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:gravity="center" 
-        />
+        android:layout_weight="30"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginRight="20dp"        />
     
     <Button
         android:layout_marginLeft="60dp"
@@ -32,6 +40,11 @@
         android:text="Continue to Login" 
         android:background="@drawable/button_rounded"
         android:layout_gravity="center"
+        android:layout_weight="10"
+        android:onClick="onSignUp"
+		android:textSize="20sp"
+		android:textColor="@android:color/white"
+		android:layout_marginBottom="20dp"
         />
 
 </LinearLayout>

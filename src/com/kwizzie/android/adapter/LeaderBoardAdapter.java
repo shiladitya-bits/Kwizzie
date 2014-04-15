@@ -50,7 +50,7 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 					//TODO Server call to get player using username
 					Player player = new Player("dravid123","Dravids","Rahul Dravid","dravid@gmail.com");
 					Intent intent = new Intent(context,UserProfileActivity.class);
-					intent.putExtra("player", player);
+					//intent.putExtra("player", player);
 					context.startActivity(intent);
 				}
 			});
@@ -88,6 +88,4 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 		}
 		
 	}
-	
-
 }

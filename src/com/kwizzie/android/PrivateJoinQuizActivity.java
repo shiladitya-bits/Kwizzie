@@ -69,7 +69,6 @@ public class PrivateJoinQuizActivity extends Activity {
     }
 	
 	private class DownloadData extends AsyncTask<String, Void, String> {
-		public static final String SERVER_URL = "http://192.168.43.106:8080/KwizzieServer/kwizzie/quizRoom/private?";
 		String response;
 		Activity activity;
 		ProgressDialog pd;
@@ -114,7 +113,7 @@ public class PrivateJoinQuizActivity extends Activity {
 			String roomKey = arg0[1];
 			try{
 				
-				String getURL = SERVER_URL+"roomId="+roomId+"&key="+roomKey;
+				String getURL = KwizzieConsts.SERVER_URL+"quizRoom/private?"+"roomId="+roomId+"&key="+roomKey;
 				Log.i("server url",getURL);
 				
 				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();

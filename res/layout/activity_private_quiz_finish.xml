@@ -5,12 +5,43 @@
 	android:orientation="vertical"
 	android:background="@color/app_background"
  >
+	
+	    
+    
+   
 
+    
+    <LinearLayout
+       android:id="@+id/updateScoreLayout" 
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:layout_gravity="center_horizontal"
+       android:layout_marginTop="40dp"
+       >
+        <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+        
+        <TextView 
+            android:layout_width="wrap_content"
+     	    android:layout_height="wrap_content"
+       		android:text="Updating Score"
+       		android:gravity="center_vertical"
+       		android:layout_gravity="center_vertical"
+       		android:textColor="@android:color/white"
+       		android:textSize="20sp"
+       		
+         />
+    
+    </LinearLayout>
     <TextView
-        android:id="@+id/finalScoreTv"
+        android:id="@+id/ScoreTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You scored" 
+        android:text="You scored " 
         android:textSize="20sp"
         android:gravity="center"
         android:textStyle="bold"
@@ -18,7 +49,28 @@
         android:layout_marginTop="40dp"
         android:textColor="@android:color/white"
         />
-    
+     <TextView
+        android:id="@+id/finalScoreTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100" 
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        />
+     
+    <LinearLayout 
+         android:id="@+id/postUpdateScoreLayout" 
+		android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="vertical" 
+    	android:gravity="bottom" 
+    	android:layout_marginBottom="20dp"
+    	android:visibility="invisible"
+	>
     <Button 
         android:id="@+id/leaderboardBtn"
         android:layout_width="fill_parent"
@@ -37,5 +89,5 @@
 		android:layout_margin="20dp"
 		android:onClick="onClickBtn"
         />
-
+</LinearLayout>
 </LinearLayout>
