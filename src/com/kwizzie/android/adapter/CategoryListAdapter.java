@@ -3,39 +3,48 @@ package com.kwizzie.android.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kwizzie.android.KwizzieConsts;
+import com.kwizzie.android.PrivateStartQuizActivity;
 import com.kwizzie.android.R;
-import com.kwizzie.model.AudioQuestion;
-import com.kwizzie.model.MCQAnswerType;
-import com.kwizzie.model.PictureQuestion;
-import com.kwizzie.model.PrivateQuizRoom;
-import com.kwizzie.model.QRAnswerType;
-import com.kwizzie.model.QRQuestion;
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionCategory;
 import com.kwizzie.model.QuestionType;
-import com.kwizzie.model.QuizRoom;
-import com.kwizzie.model.TextAnswerType;
-import com.kwizzie.model.TextQuestion;
-import com.kwizzie.model.VideoQuestion;
+
+import flexjson.JSONDeserializer;
 
 public class CategoryListAdapter extends ArrayAdapter<QuestionCategory> {
 
-	Context context;
+	ProgressDialog pd;
+	Activity context;
 	List<QuestionCategory> categories; 
-	public CategoryListAdapter(Context context,
+	public CategoryListAdapter(Activity context,
 			List<QuestionCategory> objects) {
 		super(context, R.layout.category_list_row_layout, objects);
 		this.context=context;
 		this.categories = objects;
+		pd = new ProgressDialog(context);
+		
 	}
 	
 	@Override
@@ -77,40 +86,80 @@ public class CategoryListAdapter extends ArrayAdapter<QuestionCategory> {
 	
 	//TODO: make backend call to server to get qs for category. 
 	public void prepareQuestions(int position){
-		String categoryCode = categories.get(position).getCategoryCode();
-		startQuiz();
+		new DownloadData(context, pd, categories.get(position)).execute();
 	}
-	
-	public void startQuiz(){
-		ArrayList<String> optionList = new ArrayList<String>();
-		optionList.add("disney");
-		optionList.add("dreamworks");
-		Question ques = new PictureQuestion("http://img4.wikia.nocookie.net/__cb20130222060253/disney/images/7/7d/2013disneyprincess.jpg",null, new QuestionCategory("GK","General Knowledge"),
-				"Identify The picture",new MCQAnswerType(optionList, 0, null),false);
-	
-		Question ques2 = new TextQuestion("contin___s",null,null,"Fill in the missing characters",new TextAnswerType("uou",null),false);
-		ArrayList<String> options3 = new ArrayList<String>();
-		options3.add("sonu nigam");
-		options3.add("arijit singh");
-		options3.add("mika singh");
-		options3.add("honney singh");
 		
-		Question ques3 = new AudioQuestion("http://www.largesound.com/ashborytour/sound/brobob.mp3", null, null, "Identify the singer", new MCQAnswerType(options3, 2, null), false);
-		Question ques4 = new VideoQuestion("http://info.sonicretro.org/images/5/54/Tiger_Sonic_3D_Blast_Ad.flv", null, null, "Identify the actor in video", new TextAnswerType("Ranbeer Kapoor",null), false);
-		Question ques5 = new QRQuestion(null, null, "scan the qr code", new QRAnswerType("testqr", null), false);
-		ArrayList<Question> questions=new ArrayList<Question>();
-		questions.add(ques5);
-		questions.add(ques);
-		questions.add(ques2);
-		questions.add(ques3);
-		questions.add(ques4);
+	private class DownloadData extends AsyncTask<String, Void, String> {
+		String response;
+		Activity activity;
+		ProgressDialog pd;
+		QuestionCategory category;
+		public DownloadData(Activity activity, ProgressDialog pd, QuestionCategory category){
+			this.pd = pd;
+			pd.show();
+			this.activity = activity;
+			this.category = category;
+		}
 		
-		Intent intent = new Intent(context,QuestionType.valueOf(questions.get(0).getTypeOfQuestion()).getQuestionType());
-		intent.putExtra("questionNumber",0);
-		intent.putParcelableArrayListExtra("questions", questions);
-		intent.putExtra("quizRoomName","sample Room");
-		intent.putExtra("quizRoomID","");
-		intent.putExtra("playerScore",0);
-		context.startActivity(intent);
+		@Override
+		protected void onPostExecute(String result) {
+			pd.cancel();
+			if(result != null){
+				Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+				try{
+					if(response.equals("")){
+						Toast.makeText(activity, "Room does not exist or incorrect security key!", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					JSONDeserializer<ArrayList<Question>> des = new JSONDeserializer<ArrayList<Question>>();
+					ArrayList<Question> questions = des.deserialize(response);
+					
+					Intent intent = new Intent(activity,QuestionType.valueOf(questions.get(0).getTypeOfQuestion()).getQuestionType());
+					intent.putExtra("questionNumber",0);
+					intent.putParcelableArrayListExtra("questions", questions);
+					intent.putExtra("quizRoomName", "public");
+					intent.putExtra("quizRoomID", "public");
+					intent.putExtra("category", category);
+					intent.putExtra("playerScore",0);
+					activity.startActivity(intent);
+					activity.finish();
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {		}
+
+		@Override
+		protected String doInBackground(String... arg0) {
+			String categoryCode = category.getCategoryCode();
+			try{
+				
+				String getURL = KwizzieConsts.SERVER_URL+"quizRoom/public?"+"category="+categoryCode;
+				Log.i("server url",getURL);
+				
+				//GET REQUEST
+				HttpClient client = new DefaultHttpClient();  
+				HttpGet get = new HttpGet(getURL);
+		        HttpResponse responseGet = client.execute(get);  
+		        HttpEntity resEntityGet = responseGet.getEntity();
+		        
+				if (resEntityGet != null) 
+		        {  
+					response = EntityUtils.toString(resEntityGet);
+		            Log.d("response", response);	             
+					return response;
+		        }
+				else return null;
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
 	}
+
 }
