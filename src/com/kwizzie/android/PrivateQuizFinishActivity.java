@@ -53,7 +53,7 @@ public class PrivateQuizFinishActivity extends Activity {
 	    JSONDeserializer<Player> des = new JSONDeserializer<Player>();
 	    player = des.deserialize(json);
 	    TextView scoreTv = (TextView) findViewById(R.id.finalScoreTv);
-	    scoreTv.setText(playerScore);
+	    scoreTv.setText(String.valueOf(playerScore));
 	    if(isNetworkAvailable()){
 	    	new	DownloadData(this).execute(player.getUserName() , quizRoomID , String.valueOf(playerScore));
 	    } else {

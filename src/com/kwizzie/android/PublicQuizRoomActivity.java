@@ -14,6 +14,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +39,7 @@ public class PublicQuizRoomActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_public_quiz_room);
 		categoriesListView = (ListView) findViewById(R.id.categoryList);		
+		new DownloadData(this).execute();
 	}
 
 	@Override
@@ -55,12 +59,11 @@ public class PublicQuizRoomActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			if(result != null){
-				Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+				JSONDeserializer<List<QuestionCategory>> des = new JSONDeserializer<List<QuestionCategory>>();
+				categories = des.deserialize(result);
+				categoryAdapter = new CategoryListAdapter(activity,categories);
+				categoriesListView.setAdapter(categoryAdapter);
 			}
-			JSONDeserializer<List<QuestionCategory>> des = new JSONDeserializer<List<QuestionCategory>>();
-			categories = des.deserialize(result);
-			categoryAdapter = new CategoryListAdapter(activity,categories);
-			categoriesListView.setAdapter(categoryAdapter);
 		}
 
 		@Override
@@ -92,4 +95,18 @@ public class PublicQuizRoomActivity extends Activity {
 			}
 		}
 	}
+	
+	public boolean isNetworkAvailable() 
+	{
+        ConnectivityManager cm = (ConnectivityManager) 
+          getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,7 +86,6 @@ public class CategoryListAdapter extends ArrayAdapter<QuestionCategory> {
 		
 	}
 	
-	//TODO: make backend call to server to get qs for category. 
 	public void prepareQuestions(int position){
 		new DownloadData(context, pd, categories.get(position)).execute();
 	}
@@ -161,5 +162,18 @@ public class CategoryListAdapter extends ArrayAdapter<QuestionCategory> {
 		}
 		
 	}
+
+	public boolean isNetworkAvailable() 
+	{
+        ConnectivityManager cm = (ConnectivityManager) 
+          context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
 
 }

@@ -14,7 +14,10 @@ import org.apache.http.util.EntityUtils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,7 +89,7 @@ public class RegistrationActivity extends Activity {
 		
 	}
 	
-	private class DownloadData extends AsyncTask<String, Void, Integer> {
+	private class DownloadData extends AsyncTask<String, Void, String> {
 
 		public String response;
 		public static final String SERVER_URL = KwizzieConsts.SERVER_URL+"player/register";
@@ -96,8 +99,8 @@ public class RegistrationActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPostExecute(Integer result) {
-			if(result == 1){
+		protected void onPostExecute(String result) {
+			if(result.equals("1")){
 				Intent intent = new Intent(activity , RegistrationCompleteActivity.class);
 				startActivity(intent);
 			} else {
@@ -109,7 +112,7 @@ public class RegistrationActivity extends Activity {
 		protected void onPreExecute() {		}
 
 		@Override
-		protected Integer doInBackground(String... args) {
+		protected String doInBackground(String... args) {
 			try{
 				String username = args[0];
 				String name = args[1];
@@ -135,8 +138,7 @@ public class RegistrationActivity extends Activity {
 	        {  
 				response = EntityUtils.toString(resEntityGet);
 	            Log.d("response", response);
-	            int inteResponse = Integer.parseInt(response);
-				return inteResponse;
+				return response;
 	        }
 			else return null;
 			}
@@ -144,6 +146,18 @@ public class RegistrationActivity extends Activity {
 				return null;
 			}
 		}
-		
 	}
+	public boolean isNetworkAvailable() 
+	{
+        ConnectivityManager cm = (ConnectivityManager) 
+          getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
 }
