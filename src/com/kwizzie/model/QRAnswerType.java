@@ -5,9 +5,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.LinearLayout;
 
+import com.kwizzie.android.timer.QuestionTimer;
+
 public class QRAnswerType implements AnswerType {
 
 	private String answer;
+	private QuestionTimer timer;
 	
 	public QRAnswerType(){}
 	public QRAnswerType(String answer, EvaluateAnswer evaluateAns) {
@@ -62,6 +65,15 @@ public class QRAnswerType implements AnswerType {
 	@Override
 	public void setEvaluateAnswerController(EvaluateAnswer controller) {
 		
+	}
+
+	@Override
+	public QuestionTimer getTimer() {
+		return timer;
+	}
+	@Override
+	public void setTimer(QuestionTimer timer) {
+		this.timer = timer;
 	}
 
 	public static final Parcelable.Creator<QRAnswerType> CREATOR = new Parcelable.Creator<QRAnswerType>() {

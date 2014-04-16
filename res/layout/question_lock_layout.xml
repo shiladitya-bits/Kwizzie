@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="This questions is locked !"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+	    <TextView 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+			android:text="Please make sure GPS is turned on"
+			android:textColor="#aaa"
+			android:ellipsize="middle"
+			android:gravity="center"
+			android:layout_marginBottom="20dp"
+	        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Destination Information"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDestiName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:text="BITS Pilani Goa Campus"
+        android:textSize="20sp" 
+        android:textColor="#ccc"
+        />
+
+    <ImageView
+        android:id="@+id/destiImage"
+        android:layout_width="264dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_launcher" />
+    
+       <Button
+           android:id="@+id/skipQues"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:layout_margin="20dp"
+	        android:layout_gravity="right"
+	        android:background="@drawable/button_rounded"
+	        android:text="Skip Question" />
+
+
+</LinearLayout>

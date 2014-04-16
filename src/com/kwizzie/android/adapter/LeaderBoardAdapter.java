@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.kwizzie.android.R;
 import com.kwizzie.android.UserProfileActivity;
 import com.kwizzie.model.Leader;
-import com.kwizzie.model.Player;
 
 public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 
@@ -45,10 +44,10 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 				
 				@Override
 				public void onClick(View v) {
-					Leader leader = leaders.get(position);
-					String username = leader.getUsername();
+					//Leader leader = leaders.get(position);
+					//String username = leader.getUsername();
 					//TODO Server call to get player using username
-					Player player = new Player("dravid123","Dravids","Rahul Dravid","dravid@gmail.com");
+					//Player player = new Player("dravid123","Dravids","Rahul Dravid","dravid@gmail.com");
 					Intent intent = new Intent(context,UserProfileActivity.class);
 					//intent.putExtra("player", player);
 					context.startActivity(intent);
@@ -57,7 +56,7 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 		}
 		LeaderboardItemHolder holder =(LeaderboardItemHolder) rowView.getTag();
 		holder.getPlayerName().setText(leaders.get(position).getUsername());
-		//holder.getPlayerScore().setText(players.get(position));
+		holder.getPlayerScore().setText(String.valueOf(leaders.get(position).getScore()));
 		return rowView;
 		
 		

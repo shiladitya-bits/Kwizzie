@@ -16,12 +16,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.kwizzie.android.R;
+import com.kwizzie.android.timer.QuestionTimer;
 
 public class MCQAnswerType implements AnswerType {
 
 	private List<String> options;
 	private int correctOptionIndex;
 	EvaluateAnswer evaluateAns;
+	QuestionTimer timer;
 	
 	public List<String> getOptions() {
 		return options;
@@ -82,9 +84,11 @@ public class MCQAnswerType implements AnswerType {
 				
 				@Override
 				public void onClick(View v) {
+					timer.cancel();
+					
 					String selectedText = ((Button)v).getText().toString();
 					if(selectedText.equals(options.get(correctOptionIndex))){
-						evaluateAns.onCorrectAnswer();
+						evaluateAns.onCorrectAnswer(timer.getElapsedSeconds());
 					} else {
 						evaluateAns.onWrongAnswer();
 					}
@@ -146,4 +150,14 @@ public class MCQAnswerType implements AnswerType {
 	public void setEvaluateAnswerController(EvaluateAnswer controller) {
 		this.evaluateAns = controller;
 	}
+	
+	public QuestionTimer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(QuestionTimer timer) {
+		this.timer = timer;
+	}
+	
+	
 }

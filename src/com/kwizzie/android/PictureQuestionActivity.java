@@ -4,22 +4,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kwizzie.android.timer.QuestionTimer;
 import com.kwizzie.model.EvaluateAnswer;
 import com.kwizzie.model.PictureQuestion;
 import com.kwizzie.model.Player;
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionType;
+import com.kwzzie.location.QuestionLocationListener;
 
 public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 
@@ -33,7 +38,10 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 	String quizRoomID;
 	int playerScore;
 	TextView scoreTv;
-	
+	TextView timeRemainingTv;
+	QuestionTimer timer;
+	LocationManager locationManager;
+	QuestionLocationListener listener;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,6 +62,18 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		playerScore = getIntent().getExtras().getInt("playerScore");
 		scoreTv.setText(String.valueOf(playerScore));
 		PictureQuestion ques = (PictureQuestion)questions.get(questionNumber);		
+		View quesLockLayout = findViewById(R.id.quesLockEmbedLayout);
+		
+		Button skipButton = (Button)quesLockLayout.findViewById(R.id.skipQues);
+		skipButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				onWrongAnswer();
+				PictureQuestionActivity.this.finish();
+				
+			}
+		});
 		ques.getAnswerType().setEvaluateAnswerController(this);		
 		quesTitle.setText(ques.getQuestionTitle());
 		ques.getAnswerType().createAnswerLayout((LinearLayout)findViewById(R.id.answerLayout), this);		
@@ -61,7 +81,18 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		//imageLoader.DisplayImage(ques.getPictureURL(),R.drawable.ic_launcher,view);
 		new DownloadImageTask(view).execute(ques.getPictureURL()); 
 		
-		
+		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
+		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		ques.getAnswerType().setTimer(timer);
+
+		if(ques.getLocation() ==null){
+			quesLockLayout.setVisibility(View.GONE);
+			timer.start();
+		} else {
+			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
+		}
 	}
 
 	@Override
@@ -95,6 +126,7 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			iv.setImageBitmap(result);
+			
 		}
 
 		@Override
@@ -103,52 +135,49 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		}
 		
 	}
-
-
 	@Override
-	public void onCorrectAnswer() {
-		//TODO increment according to timer
-		playerScore=playerScore + 5;
-		scoreTv.setText(String.valueOf(playerScore));
+	public void onCorrectAnswer(int time) {
+		locationManager.removeUpdates(listener);
 		questionNumber++;
+		playerScore=playerScore + 20 - time;
+		scoreTv.setText(String.valueOf(playerScore));
+		Intent intent;
 		if(questionNumber==questions.size()){
-			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
+			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
-			Intent intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
+			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
 			intent.putExtra("questionNumber",questionNumber);
 			intent.putParcelableArrayListExtra("questions", questions);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
 		}
+		intent.putExtra("quizRoomName",quizRoomName);
+		intent.putExtra("quizRoomID",quizRoomID);
+		intent.putExtra("playerScore",playerScore);
+		if(quizRoomID.equals("public")){
+			intent.putExtra("category", getIntent().getExtras().getParcelable("category"));
+		}
+		startActivity(intent);
 		finish();
 	}
 
 	@Override
 	public void onWrongAnswer() {
+		locationManager.removeUpdates(listener);
 		questionNumber++;
+		Intent intent;
 		if(questionNumber==questions.size()){
-			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
+			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
-			Intent intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
+			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
 			intent.putExtra("questionNumber",questionNumber);
 			intent.putParcelableArrayListExtra("questions", questions);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
 		}
+		intent.putExtra("quizRoomName",quizRoomName);
+		intent.putExtra("quizRoomID",quizRoomID);
+		intent.putExtra("playerScore",playerScore);
+		if(quizRoomID.equals("public")){
+			intent.putExtra("category", getIntent().getExtras().getParcelable("category"));
+		}
+		startActivity(intent);
 		finish();
 	}
-
-
 }

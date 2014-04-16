@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kwizzie.android.KwizzieConsts;
-import com.kwizzie.android.PrivateStartQuizActivity;
 import com.kwizzie.android.R;
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionCategory;

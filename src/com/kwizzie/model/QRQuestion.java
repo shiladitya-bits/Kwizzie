@@ -23,6 +23,7 @@ public class QRQuestion extends Question{
 		questionTitle = source.readString();
 		answerType = source.readParcelable(QRAnswerType.class.getClassLoader());
 		typeOfQuestion = source.readString();
+		location = source.readParcelable(QuestionLocation.class.getClassLoader());
 	}
 
 	@Override
@@ -35,6 +36,7 @@ public class QRQuestion extends Question{
 		dest.writeString(questionTitle);
 		dest.writeParcelable(answerType, flags);
 		dest.writeString(typeOfQuestion);
+		dest.writeParcelable(location, flags);
 	}
 	
 	public static final Parcelable.Creator<QRQuestion> CREATOR = new Parcelable.Creator<QRQuestion>() {

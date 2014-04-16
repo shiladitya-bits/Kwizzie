@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.kwizzie.android.timer.QuestionTimer;
+
 public class TextAnswerType implements AnswerType {
 	
 	private String correctAnswer;
 	EvaluateAnswer evalAns;
-
+	QuestionTimer timer;
+	
 	public TextAnswerType(){}
 	
 	public TextAnswerType(Parcel source){
@@ -65,9 +68,10 @@ public class TextAnswerType implements AnswerType {
 		
 			@Override
 			public void onClick(View v) {
+				timer.cancel();
 				String ans = et.getText().toString().trim();
 				if(ans.equalsIgnoreCase(correctAnswer)){
-					evalAns.onCorrectAnswer();
+					evalAns.onCorrectAnswer(timer.getElapsedSeconds());
 				} else{
 					evalAns.onWrongAnswer();
 				}
@@ -107,6 +111,16 @@ public class TextAnswerType implements AnswerType {
 	@Override
 	public void setEvaluateAnswerController(EvaluateAnswer controller) {
 		this.evalAns = controller;
+	}
+
+	@Override
+	public QuestionTimer getTimer() {
+		return timer;
+	}
+
+	@Override
+	public void setTimer(QuestionTimer timer) {
+		this.timer = timer;
 	}
 	
 	

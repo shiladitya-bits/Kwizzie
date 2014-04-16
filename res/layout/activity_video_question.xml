@@ -6,6 +6,17 @@
 	android:weightSum="100"
 	android:background="@color/app_background"
  >
+ <include 
+     android:id="@+id/quesLockEmbedLayout"
+   	layout="@layout/question_lock_layout"
+     />
+ 
+    <LinearLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent" 
+    	android:orientation="vertical"
+    	android:weightSum="100"
+     >
   <include 
       android:id="@+id/embedLayout"
       layout="@layout/question_header_layout"/> 
@@ -43,6 +54,6 @@
         >
 
       
-
+</LinearLayout>
 </LinearLayout>
 </LinearLayout>

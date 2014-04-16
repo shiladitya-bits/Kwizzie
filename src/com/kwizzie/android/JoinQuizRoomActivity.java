@@ -1,15 +1,8 @@
 package com.kwizzie.android;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,5 +36,6 @@ public class JoinQuizRoomActivity extends Activity {
 			startActivity(intent1);
 			break;
 		}
+		finish();
 	}
 }

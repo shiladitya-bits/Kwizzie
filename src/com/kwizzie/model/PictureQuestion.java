@@ -1,8 +1,5 @@
 package com.kwizzie.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,7 +34,7 @@ public class PictureQuestion extends Question {
 	public PictureQuestion(Parcel source){
 		questionTitle = source.readString();
 		pictureURL = source.readString();
-		//location = source.readParcelable(QuestionLocation.class.getClassLoader());
+		location = source.readParcelable(QuestionLocation.class.getClassLoader());
 		//category = source.readParcelable(QuestionCategory.class.getClassLoader());
 		answerType = source.readParcelable(AnswerType.class.getClassLoader());
 		typeOfQuestion = source.readString();
@@ -61,7 +58,7 @@ public class PictureQuestion extends Question {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(questionTitle);
 		dest.writeString(pictureURL);
-		//dest.writeParcelable(location, flags);
+		dest.writeParcelable(location, flags);
 		//dest.writeParcelable(category, flags);
 		dest.writeParcelable(answerType, flags);
 		dest.writeString(typeOfQuestion);

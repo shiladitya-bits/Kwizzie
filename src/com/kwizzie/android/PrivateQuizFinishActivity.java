@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kwizzie.model.Player;
+import com.kwizzie.model.QuestionCategory;
 
 import flexjson.JSONDeserializer;
 
@@ -40,7 +41,6 @@ public class PrivateQuizFinishActivity extends Activity {
 	int playerScore;
 	Player player;
 	String response;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +48,7 @@ public class PrivateQuizFinishActivity extends Activity {
 		quizRoomName = getIntent().getExtras().getString("quizRoomName");
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
+		
 		SharedPreferences  pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 	    String json = pref.getString("player", "");
 	    JSONDeserializer<Player> des = new JSONDeserializer<Player>();
@@ -55,18 +56,14 @@ public class PrivateQuizFinishActivity extends Activity {
 	    TextView scoreTv = (TextView) findViewById(R.id.finalScoreTv);
 	    scoreTv.setText(String.valueOf(playerScore));
 	    if(isNetworkAvailable()){
-	    	new	DownloadData(this).execute(player.getUserName() , quizRoomID , String.valueOf(playerScore));
+	    	new	DownloadData().execute(player.getUserName() , quizRoomID , String.valueOf(playerScore));
 	    } else {
 		new AlertDialog.Builder(this).setMessage("Can not connect to network. Please check your data connection.")
 		.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				int pid = android.os.Process.myPid();
-				android.os.Process.killProcess(pid);
-				Intent intent = new Intent(Intent.ACTION_MAIN);
-				intent.addCategory(Intent.CATEGORY_HOME);
-				startActivity(intent);
+				finish();
 			}
 		}).setCancelable(false).show();
 	}
@@ -113,11 +110,6 @@ public class PrivateQuizFinishActivity extends Activity {
 	
 	private class DownloadData extends AsyncTask<String, Void, String> {
 
-		Activity activity;
-		public DownloadData(Activity activity){
-			this.activity = activity;
-		}
-		
 		@Override
 		protected void onPostExecute(String result) {
 			LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.postUpdateScoreLayout);
@@ -136,16 +128,22 @@ public class PrivateQuizFinishActivity extends Activity {
 			String username = args[0];
 			String roomID = args[1];
 			String score = args[2];
+
+			String getURL = KwizzieConsts.SERVER_URL+"player/updatePrivateScore";
+			Log.i("server url",getURL);
+
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("roomID", roomID));
+			nameValuePairs.add(new BasicNameValuePair("username", username));
+			nameValuePairs.add(new BasicNameValuePair("score", score));
+			
+			
+			if(roomID.equals("public")){
+				QuestionCategory category = getIntent().getExtras().getParcelable("category");
+				getURL = KwizzieConsts.SERVER_URL+"player/updatePublicScore";
+				nameValuePairs.add(new BasicNameValuePair("category", category.getCategoryCode()));
+			}
 			try{
-				
-				String getURL = KwizzieConsts.SERVER_URL+"player/updatePrivateScore";
-				Log.i("server url",getURL);
-				
-				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-				nameValuePairs.add(new BasicNameValuePair("roomID", roomID));
-				nameValuePairs.add(new BasicNameValuePair("username", username));
-				nameValuePairs.add(new BasicNameValuePair("score", score));
-				
 				// POST REQUEST
 				HttpClient httpclient = new DefaultHttpClient();				
 				HttpPost httppost = new HttpPost(getURL);

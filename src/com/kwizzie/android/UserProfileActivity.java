@@ -14,7 +14,7 @@ public class UserProfileActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_profile);
-		Player player = (Player)getIntent().getExtras().get("player");
+		//Player player = (Player)getIntent().getExtras().get("player");
 	}
 
 	@Override

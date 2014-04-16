@@ -24,6 +24,7 @@ public class AudioQuestion extends Question implements Parcelable{
 	public AudioQuestion(Parcel source){
 		audioURL = source.readString();
 		questionTitle = source.readString();
+		location = source.readParcelable(QuestionLocation.class.getClassLoader());
 		answerType = source.readParcelable(AudioQuestion.class.getClassLoader());
 		typeOfQuestion = source.readString();
 	}
@@ -42,6 +43,7 @@ public class AudioQuestion extends Question implements Parcelable{
 	public void writeToParcel(Parcel parcel, int flags) {
 		parcel.writeString(audioURL);
 		parcel.writeString(questionTitle);
+		parcel.writeParcelable(location, flags);
 		parcel.writeParcelable(answerType, flags);
 		parcel.writeString(typeOfQuestion);
 		

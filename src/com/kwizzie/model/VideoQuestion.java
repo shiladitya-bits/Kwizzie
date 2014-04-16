@@ -25,8 +25,10 @@ public class VideoQuestion extends Question implements Parcelable{
 	public VideoQuestion(Parcel source){
 		videoURL=source.readString();
 		questionTitle=source.readString();
+		location = source.readParcelable(QuestionLocation.class.getClassLoader());
 		answerType=source.readParcelable(AnswerType.class.getClassLoader());
 		typeOfQuestion=source.readString();
+		
 	}
 	public String getVideoURL() {
 		return videoURL;
@@ -42,8 +44,7 @@ public class VideoQuestion extends Question implements Parcelable{
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(videoURL);
 		dest.writeString(questionTitle);
-		//dest.writeParcelable(location, flags);
-		//dest.writeParcelable(category, flags);
+		dest.writeParcelable(location, flags);
 		dest.writeParcelable(answerType, flags);
 		dest.writeString(typeOfQuestion);
 		//dest.writeParcelable(isLocked, flags);

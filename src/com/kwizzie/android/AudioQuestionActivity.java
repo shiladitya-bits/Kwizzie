@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -15,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kwizzie.android.timer.QuestionTimer;
 import com.kwizzie.model.AudioQuestion;
 import com.kwizzie.model.EvaluateAnswer;
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionType;
+import com.kwzzie.location.QuestionLocationListener;
 
 public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 
@@ -30,6 +34,11 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	String quizRoomID;
 	int playerScore;
 	TextView scoreTv;
+	TextView timeRemainingTv;
+	QuestionTimer timer;
+	LocationManager locationManager;
+	QuestionLocationListener listener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,12 +56,38 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 		quizRoomID = getIntent().getExtras().getString("quizRoomID");
 		playerScore = getIntent().getExtras().getInt("playerScore");
 		scoreTv.setText(String.valueOf(playerScore));
-		
-		AudioQuestion ques = (AudioQuestion)questions.get(questionNumber);		
+		AudioQuestion ques = (AudioQuestion)questions.get(questionNumber);
+
+		View quesLockLayout = findViewById(R.id.quesLockEmbedLayout);
+
+		Button skipButton = (Button)quesLockLayout.findViewById(R.id.skipQues);
+		skipButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				onWrongAnswer();
+				AudioQuestionActivity.this.finish();
+				
+			}
+		});
 		ques.getAnswerType().setEvaluateAnswerController(this);		
 		quesTitle.setText(ques.getQuestionTitle());
 		ques.getAnswerType().createAnswerLayout((LinearLayout)findViewById(R.id.answerLayout), this);
 		final String url = ques.getAudioURL();
+
+		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
+		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		ques.getAnswerType().setTimer(timer);
+		
+		if(ques.getLocation() ==null){
+			quesLockLayout.setVisibility(View.GONE);
+		} else {
+			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
+			timer.start();
+		}
+		
 		
 		playB.setOnClickListener(new View.OnClickListener() { 
 			@Override
@@ -91,46 +126,52 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	}
 
 	@Override
-	public void onCorrectAnswer() {
+	public void onCorrectAnswer(int time) {
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
-		playerScore=playerScore + 5;
+		playerScore=playerScore + 20 - time;
 		scoreTv.setText(String.valueOf(playerScore));
+		Intent intent;
 		if(questionNumber==questions.size()){
-			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
+			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
-			Intent intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
+			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
 			intent.putExtra("questionNumber",questionNumber);
 			intent.putParcelableArrayListExtra("questions", questions);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
 		}
+		intent.putExtra("quizRoomName",quizRoomName);
+		intent.putExtra("quizRoomID",quizRoomID);
+		intent.putExtra("playerScore",playerScore);
+		if(quizRoomID.equals("public")){
+			intent.putExtra("category", getIntent().getExtras().getParcelable("category"));
+		}
+		startActivity(intent);
 		finish();
 	}
 
 	@Override
 	public void onWrongAnswer() {
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
+		Intent intent;
 		if(questionNumber==questions.size()){
-			Intent intent = new Intent(this,PrivateQuizFinishActivity.class);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
+			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
-			Intent intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
+			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
 			intent.putExtra("questionNumber",questionNumber);
 			intent.putParcelableArrayListExtra("questions", questions);
-			intent.putExtra("quizRoomName",quizRoomName);
-			intent.putExtra("quizRoomID",quizRoomID);
-			intent.putExtra("playerScore",playerScore);
-			startActivity(intent);
 		}
+		intent.putExtra("quizRoomName",quizRoomName);
+		intent.putExtra("quizRoomID",quizRoomID);
+		intent.putExtra("playerScore",playerScore);
+		if(quizRoomID.equals("public")){
+			intent.putExtra("category", getIntent().getExtras().getParcelable("category"));
+		}
+		startActivity(intent);
 		finish();
 	}
 

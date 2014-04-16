@@ -2,7 +2,6 @@ package com.kwizzie.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.os.ParcelableCompat;
 
 public class PlayerPersonalDetails implements Parcelable {
 	private String photoUrl;

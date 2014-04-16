@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -115,16 +114,6 @@ public class PrivateJoinQuizActivity extends Activity {
 				String getURL = KwizzieConsts.SERVER_URL+"quizRoom/private?"+"roomId="+roomId+"&key="+roomKey;
 				Log.i("server url",getURL);
 				
-				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//				nameValuePairs.add(new BasicNameValuePair("flag", "transaction"));
-				
-				// POST REQUEST
-//				HttpClient httpclient = new DefaultHttpClient();				
-//				HttpPost httppost = new HttpPost(getURL);
-//				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//				HttpResponse httpResponse = httpclient.execute(httppost);
-//				HttpEntity resEntityGet = httpResponse.getEntity();  
-		
 				//GET REQUEST
 				HttpClient client = new DefaultHttpClient();  
 				HttpGet get = new HttpGet(getURL);

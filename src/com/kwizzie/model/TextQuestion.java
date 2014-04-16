@@ -25,7 +25,7 @@ public class TextQuestion extends Question{
 	public TextQuestion(Parcel source) {
 		questionTitle = source.readString();
 		subTitle = source.readString();
-		//location = source.readParcelable(QuestionLocation.class.getClassLoader());
+		location = source.readParcelable(QuestionLocation.class.getClassLoader());
 		//category = source.readParcelable(QuestionCategory.class.getClassLoader());
 		answerType = source.readParcelable(AnswerType.class.getClassLoader());
 		typeOfQuestion = source.readString();
@@ -45,7 +45,7 @@ public class TextQuestion extends Question{
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(questionTitle);
 		dest.writeString(subTitle);
-		//dest.writeParcelable(location, flags);
+		dest.writeParcelable(location, flags);
 		//dest.writeParcelable(category, flags);
 		dest.writeParcelable(answerType, flags);
 		dest.writeString(typeOfQuestion);
