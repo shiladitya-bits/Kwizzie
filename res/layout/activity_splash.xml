@@ -5,23 +5,23 @@
     android:orientation="vertical"
     android:weightSum="100">
 
-    <ImageView 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"
+    <ImageView
+        android:layout_width="259dp"
+        android:layout_height="278dp"
+        android:layout_gravity="center"
         android:contentDescription="Kwizzie Logo"
-        android:layout_weight="40"
-        />
+        android:src="@drawable/ic_launcher" />
     
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Kwizzie"
-        android:textSize="40sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:layout_weight="20"
         android:textColor="@color/dark_grey"
         android:gravity="center"
+        android:layout_marginBottom="20dp"
         />
 
     <Button
@@ -33,15 +33,15 @@
         android:background="@drawable/button_rounded"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:layout_weight="5"
+        android:textSize="20sp"
+        android:layout_weight="10"
         android:text="Login" />
     
    <LinearLayout 
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_weight="20"
+    android:layout_weight="25"
     android:gravity="center"
     >
     
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Not a member yet?"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="italic"
         android:gravity="right"
         android:layout_marginRight="5dp"
@@ -62,7 +62,8 @@
 			android:background="@android:color/transparent"
 			android:textStyle="bold"
             android:text="Sign Up" 
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:textColor="#ccc"
             android:gravity="center"
             android:onClick="onClick"
             />

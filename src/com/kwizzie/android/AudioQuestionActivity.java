@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -86,8 +88,13 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
 			timer.start();
+			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
+			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));
+			
+			
 		}
-		
+	
 		
 		playB.setOnClickListener(new View.OnClickListener() { 
 			@Override

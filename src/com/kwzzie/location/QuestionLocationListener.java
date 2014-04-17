@@ -5,11 +5,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.kwizzie.android.timer.QuestionTimer;
 import com.kwizzie.model.QuestionLocation;
-
 
 public class QuestionLocationListener implements LocationListener{
 
@@ -30,6 +30,8 @@ public class QuestionLocationListener implements LocationListener{
 	
 	@Override
 	public void onLocationChanged(Location location) {
+		Log.i("currentLocation" , String.valueOf(location.getLatitude()));
+		Log.i("currentLocation" , String.valueOf(location.getLongitude()));
 		double radius = questionLocation.getRadius();
 		float distance = location.distanceTo(destination);
 		if(distance < radius){

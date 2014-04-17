@@ -74,11 +74,6 @@
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
-            android:name="com.kwizzie.android.AudioActivity"
-            android:label="@string/title_activity_audio"
-            android:theme="@android:style/Theme.Holo.NoActionBar" >
-        </activity>
-        <activity
             android:name="com.kwizzie.android.AudioQuestionActivity"
             android:label="@string/title_activity_audio_question"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
