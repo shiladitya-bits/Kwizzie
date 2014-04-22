@@ -9,7 +9,7 @@
  <include 
      android:id="@+id/quesLockEmbedLayout"
    	layout="@layout/question_lock_layout"
-     />
+     /> 
  
     <LinearLayout
     	android:layout_width="match_parent"
@@ -17,32 +17,67 @@
     	android:orientation="vertical"
     	android:weightSum="100"
      >
- <include 
+  <include 
      android:id="@+id/embedLayout"
-     layout="@layout/question_header_layout"/>
+     layout="@layout/question_header_layout"/> 
  <TextView
         android:id="@+id/questionTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Here is a very very very long question you have to answer .. come on !!!" 
+        android:text="Place your camera in front of the QR code after clicking Capture. The QR code will be automatically detected." 
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
+        
         android:layout_weight="10" 
         android:textSize="15sp"
         android:textColor="@android:color/white"     
         />
 
- <Button 
+ <ImageButton
      android:id="@+id/qrStartB"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
+     android:layout_width="119dp"
+     android:layout_height="75dp"
      android:layout_gravity="center"
-     android:text="Capture"
+     android:background="@null"
+     android:layout_margin="50dp"
      android:onClick="onClickQr"
-     android:background="@drawable/button_rounded"
-     />
+     android:scaleType="centerInside"
+     android:src="@drawable/capture"
+      />
+
+ <LinearLayout
+    android:id="@+id/qrPostAnswerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:gravity="center"
+ >
+
+    <ImageView
+        android:id="@+id/ivCorrectDrawable"   
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitStart"
+        android:src="@drawable/correct" />
+
+    <TextView
+        android:id="@+id/tvCorrectAns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:ellipsize="start"
+        android:ems="20"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:text="Correct Answer" />
+
+
+</LinearLayout>
+ 
  </LinearLayout>
 </LinearLayout>

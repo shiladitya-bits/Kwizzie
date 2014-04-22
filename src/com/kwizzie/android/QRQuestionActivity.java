@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -74,7 +75,7 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		quesTitle.setText(ques.getQuestionTitle());
 		
 		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
-		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		timer = new QuestionTimer(this, timeRemainingTv, KwizzieConsts.QR_QUESTION_TIME_LIMIT);
 		ques.getAnswerType().setTimer(timer);
 
 		if(ques.getLocation() ==null){
@@ -84,6 +85,8 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
+			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
+			tvDest.setText(ques.getLocation().getLocationName());
 		}
 				
 	}
@@ -100,10 +103,22 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		if(scanResult != null){
 			 String output = scanResult.getContents();
 			 String correctAns = ((QRAnswerType)ques.getAnswerType()).getAnswer();
-		    	if(output.equalsIgnoreCase(correctAns)){
-		    		onCorrectAnswer(timer.getElapsedSeconds());
-		    	} else {
-		    		onWrongAnswer();
+	    		
+	    		PostAnswerTimer finishTimer = new PostAnswerTimer(KwizzieConsts.POST_ANSWER_DELAY, KwizzieConsts.POST_ANSWER_DELAY, output, correctAns);
+			 if(output.equalsIgnoreCase(correctAns)){				 	
+				 View v = findViewById(R.id.qrPostAnswerLayout);
+		    	 v.setVisibility(View.VISIBLE);
+		    	 finishTimer.start();
+			 } else {
+		    		TextView tvIncorrect = (TextView)findViewById(R.id.tvCorrectAns);
+		    		tvIncorrect.setText("Invalid QR code scanned!");
+		    		
+		    		ImageView ivIncorrect = (ImageView)findViewById(R.id.ivCorrectDrawable);
+		    		ivIncorrect.setImageDrawable(getResources().getDrawable(R.drawable.incorrect));
+		    		View v = findViewById(R.id.qrPostAnswerLayout);
+		    		v.setVisibility(View.VISIBLE);
+		    		
+		    		finishTimer.start();
 		    	}
 		} else {
 			onWrongAnswer();
@@ -119,9 +134,11 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 
 	@Override
 	public void onCorrectAnswer(int time) {
-		locationManager.removeUpdates(listener);
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
-		playerScore=playerScore + 20 - time;
+		playerScore=playerScore + 20 - time/10;
 		scoreTv.setText(String.valueOf(playerScore));
 		Intent intent;
 		if(questionNumber==questions.size()){
@@ -143,7 +160,9 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 
 	@Override
 	public void onWrongAnswer() {
-		locationManager.removeUpdates(listener);
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
 		Intent intent;
 		if(questionNumber==questions.size()){
@@ -161,5 +180,28 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		}
 		startActivity(intent);
 		finish();
+	}
+	
+
+	private class PostAnswerTimer extends CountDownTimer{
+		String userAns, correctAns;
+		public PostAnswerTimer(long millisInFuture, long countDownInterval, String userAns, String correctAns) {
+			super(millisInFuture, countDownInterval);
+			this.userAns = userAns;
+			this.correctAns = correctAns;
+		}
+
+		@Override
+		public void onFinish() {
+			if(userAns.equalsIgnoreCase(correctAns)){
+	    		onCorrectAnswer(timer.getElapsedSeconds());
+	    	} else {
+	    		onWrongAnswer();
+	    	}
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {}
+		
 	}
 }

@@ -2,6 +2,7 @@ package com.kwizzie.android;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -82,16 +83,18 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		new DownloadImageTask(view).execute(ques.getPictureURL()); 
 		
 		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
-		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		timer = new QuestionTimer(this, timeRemainingTv, KwizzieConsts.QUESTION_TIME_LIMIT);
 		ques.getAnswerType().setTimer(timer);
 
 		if(ques.getLocation() ==null){
 			quesLockLayout.setVisibility(View.GONE);
-			timer.start();
 		} else {
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
+			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
+			tvDest.setText(ques.getLocation().getLocationName());
+
 		}
 	}
 
@@ -115,6 +118,22 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 			Bitmap output = null;
 			
 			try{
+				if(url.startsWith("localhost")){
+					url = "10.0.2.2"+url.substring(9);
+				}
+
+				String finalUrl;
+				StringTokenizer portToken = new StringTokenizer(url, "/");
+				if(!quizRoomID.equals("public")){
+					finalUrl = "http://"+portToken.nextToken();
+				} else {
+					finalUrl = "http://"+portToken.nextToken()+":8080";
+				}
+				while(portToken.hasMoreTokens()){
+					finalUrl = finalUrl+"/"+portToken.nextToken();
+				}
+				url = finalUrl;
+				
 				InputStream in = new java.net.URL(url).openStream();
 				output = BitmapFactory.decodeStream(in);
 			} catch(Exception e){
@@ -126,7 +145,7 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			iv.setImageBitmap(result);
-			
+			timer.start();			
 		}
 
 		@Override
@@ -137,7 +156,9 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 	}
 	@Override
 	public void onCorrectAnswer(int time) {
-		locationManager.removeUpdates(listener);
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
 		playerScore=playerScore + 20 - time;
 		scoreTv.setText(String.valueOf(playerScore));
@@ -161,7 +182,9 @@ public class PictureQuestionActivity extends Activity implements EvaluateAnswer{
 
 	@Override
 	public void onWrongAnswer() {
-		locationManager.removeUpdates(listener);
+		if(locationManager != null){
+			locationManager.removeUpdates(listener);
+		}
 		questionNumber++;
 		Intent intent;
 		if(questionNumber==questions.size()){

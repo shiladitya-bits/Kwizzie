@@ -19,6 +19,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
 		android:textColor="@android:color/white"        
+		android:textCursorDrawable="@null"
         android:ems="10" >
         <requestFocus />
     </EditText>
@@ -30,8 +31,21 @@
         android:ems="10"
 		android:textColor="@android:color/white"
         android:hint="Security key"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="50dp"       
+		android:textCursorDrawable="@null"
         android:inputType="textPassword" />
+    
+    <TextView
+        android:id="@+id/tvFailMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="authentication failed!"
+        android:textColor="#FF0000"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_marginBottom="10dp"
+        />
 
     <Button
         android:layout_width="fill_parent"
@@ -42,5 +56,6 @@
         android:layout_marginLeft="20dp"
         android:onClick="onBtnClick"
         android:background="@drawable/button_rounded"
+        android:textColor="@android:color/white"
         />
 </LinearLayout>

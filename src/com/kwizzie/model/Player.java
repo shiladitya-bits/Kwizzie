@@ -11,8 +11,8 @@ public class Player implements Parcelable{
 	private String userName;
 	private String password;
 	private PlayerPersonalDetails details;
-	private Map<String,Integer> privateQuizRoomScores;
-	private Map<String,Integer> publicCategoryScores;
+	private Map<String,Integer> quizRoomScores;
+	private Map<String,Integer> publicRoomScores;
 	
 	public Player(){}
 	
@@ -25,8 +25,8 @@ public class Player implements Parcelable{
 	public Player(Parcel source){
 		userName = source.readString();
 		details = source.readParcelable(PlayerPersonalDetails.class.getClassLoader());		
-		source.readMap(privateQuizRoomScores, HashMap.class.getClassLoader());
-		source.readMap(publicCategoryScores, HashMap.class.getClassLoader());
+		source.readMap(quizRoomScores, HashMap.class.getClassLoader());
+		source.readMap(publicRoomScores, HashMap.class.getClassLoader());
 	}
 	public String getUserName() {
 		return userName;
@@ -62,31 +62,22 @@ public class Player implements Parcelable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	/*
-	public int increaseScore(String quizRoomName , int increment){
-		int initialScore=0;
-		if(quizRoomScores.containsKey(quizRoomName)){
-			initialScore=quizRoomScores.get(quizRoomName);
-		}
-		int newscore = initialScore+increment;
-		quizRoomScores.put(quizRoomName, newscore);
-		return newscore;
-	}*/
 
-	public Map<String,Integer> getPrivateQuizRoomScores() {
-		return privateQuizRoomScores;
+
+	public Map<String, Integer> getQuizRoomScores() {
+		return quizRoomScores;
 	}
 
-	public void setPrivateQuizRoomScores(Map<String,Integer> privateQuizRoomScores) {
-		this.privateQuizRoomScores = privateQuizRoomScores;
+	public void setQuizRoomScores(Map<String, Integer> quizRoomScores) {
+		this.quizRoomScores = quizRoomScores;
 	}
 
-	public Map<String,Integer> getPublicCategoryScores() {
-		return publicCategoryScores;
+	public Map<String, Integer> getPublicRoomScores() {
+		return publicRoomScores;
 	}
 
-	public void setPublicCategoryScores(Map<String,Integer> publicCategoryScores) {
-		this.publicCategoryScores = publicCategoryScores;
+	public void setPublicRoomScores(Map<String, Integer> publicRoomScores) {
+		this.publicRoomScores = publicRoomScores;
 	}
 
 	@Override
@@ -98,8 +89,8 @@ public class Player implements Parcelable{
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(userName);
 		dest.writeParcelable(details, flags);
-		dest.writeMap(privateQuizRoomScores);
-		dest.writeMap(publicCategoryScores);
+		dest.writeMap(quizRoomScores);
+		dest.writeMap(publicRoomScores);
 	}
 	public static final Parcelable.Creator<Player> CREATOR = new Parcelable.Creator<Player>() {
 

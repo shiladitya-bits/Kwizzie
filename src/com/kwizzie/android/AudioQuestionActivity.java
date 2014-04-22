@@ -1,7 +1,7 @@
 package com.kwizzie.android;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.kwizzie.android.timer.QuestionTimer;
@@ -31,7 +33,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	TextView quesTitle;
 	ArrayList<Question> questions;
 	int questionNumber;
-	Button playB;
+	ImageButton playB;
 	String quizRoomName;
 	String quizRoomID;
 	int playerScore;
@@ -40,17 +42,17 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 	QuestionTimer timer;
 	LocationManager locationManager;
 	QuestionLocationListener listener;
-	
+	MediaPlayer mediaPlayer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_audio_question);
 		ImageView profilePictureView = (ImageView)findViewById(R.id.profile_pic_imageview);
-		profilePictureView.setImageBitmap(Utils.getProfilePicture());
+		profilePictureView.setImageBitmap(Utils.getProfilePicture()); 
 
 		View embedLayout = findViewById(R.id.embedLayout);
 		scoreTv = (TextView) embedLayout.findViewById(R.id.scoreTv);
-		playB = (Button) findViewById(R.id.playB);
+		playB = (ImageButton) findViewById(R.id.playB);
 		quesTitle = (TextView) findViewById(R.id.questionTitle);
 		questions =  getIntent().getParcelableArrayListExtra("questions");		
 		questionNumber = getIntent().getExtras().getInt("questionNumber");
@@ -75,10 +77,26 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 		ques.getAnswerType().setEvaluateAnswerController(this);		
 		quesTitle.setText(ques.getQuestionTitle());
 		ques.getAnswerType().createAnswerLayout((LinearLayout)findViewById(R.id.answerLayout), this);
-		final String url = ques.getAudioURL();
-
+	
+		String url;
+		if(ques.getAudioURL().startsWith("localhost")){
+			url = "10.0.2.2"+ques.getAudioURL().substring(9);
+		} else {
+			url = ques.getAudioURL();
+		}
+		String finalUrl;
+		StringTokenizer portToken = new StringTokenizer(url, "/");
+		if(!quizRoomID.equals("public")){
+			finalUrl = "http://"+portToken.nextToken();
+		} else {
+			finalUrl = "http://"+portToken.nextToken()+":8080";
+		}
+		while(portToken.hasMoreTokens()){
+			finalUrl = finalUrl+"/"+portToken.nextToken();
+		}
+		url = finalUrl;
 		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
-		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		timer = new QuestionTimer(this, timeRemainingTv, KwizzieConsts.QUESTION_TIME_LIMIT);
 		ques.getAnswerType().setTimer(timer);
 		
 		if(ques.getLocation() ==null){
@@ -87,40 +105,48 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
-			timer.start();
-			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+/*			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
-			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));
-			
+			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));*/
+			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
+			tvDest.setText(ques.getLocation().getLocationName());
 			
 		}
-	
+	    final ProgressBar pbLoading = (ProgressBar)findViewById(R.id.pbLoadingAudio);
+		playB = (ImageButton)findViewById(R.id.playB);
+		mediaPlayer = new MediaPlayer();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		try{
+		mediaPlayer.setDataSource(url);
+		mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+			
+			@Override
+			public void onPrepared(MediaPlayer mp) {
+				playB.setVisibility(View.VISIBLE);
+				pbLoading.setVisibility(View.GONE);
+			}
+		});
+		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				playB.setImageDrawable(getResources().getDrawable(R.drawable.play_audio));
+				playB.setClickable(true);
+				timer.start();	
+			}
+		});
+		mediaPlayer.prepareAsync();
+		
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		playB.setOnClickListener(new View.OnClickListener() { 
 			@Override
 			public void onClick(View v) {
-				MediaPlayer mediaPlayer = new MediaPlayer();
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				try {
-					mediaPlayer.setDataSource(url);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
-					mediaPlayer.prepare();
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
+				playB.setImageDrawable(getResources().getDrawable(R.drawable.disabled_play));
+				playB.setClickable(false);
 				mediaPlayer.start();
-				
 			}
 		});
 	}
@@ -134,6 +160,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 
 	@Override
 	public void onCorrectAnswer(int time) {
+		mediaPlayer.stop();
 		if(locationManager != null){
 			locationManager.removeUpdates(listener);
 		}
@@ -160,6 +187,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 
 	@Override
 	public void onWrongAnswer() {
+		mediaPlayer.stop();
 		if(locationManager != null){
 			locationManager.removeUpdates(listener);
 		}

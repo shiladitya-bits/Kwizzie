@@ -13,16 +13,19 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.kwizzie.model.Player;
 import com.kwizzie.model.PrivateQuizRoom;
 import com.kwizzie.model.Question;
 
@@ -31,10 +34,17 @@ import flexjson.JSONDeserializer;
 public class PrivateJoinQuizActivity extends Activity {
 
 	ProgressDialog pd;
+	Player player;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_join_quiz);
+
+		SharedPreferences  pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+	    String json = pref.getString("player", "");
+	    JSONDeserializer<Player> des = new JSONDeserializer<Player>();
+	    player = des.deserialize(json);
+
 		pd = new ProgressDialog(this);
 		pd.setMessage("Connecting");
 		pd.setCancelable(false);
@@ -71,6 +81,7 @@ public class PrivateJoinQuizActivity extends Activity {
 		String response;
 		Activity activity;
 		ProgressDialog pd;
+		String roomID;
 		public DownloadData(Activity activity, ProgressDialog pd){
 			this.pd = pd;
 			pd.show();
@@ -79,17 +90,27 @@ public class PrivateJoinQuizActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
+			TextView failMsg = (TextView)activity.findViewById(R.id.tvFailMessage);
 			pd.cancel();
 			if(result != null){
 				try{
-					if(response.equals("")){
-						Toast.makeText(activity, "Room does not exist or incorrect security key!", Toast.LENGTH_SHORT).show();
+					if(response.equals("1")){
+						failMsg.setText("Room does not exist or incorrect security key!");
+						failMsg.setVisibility(View.VISIBLE);
+						return;
+					} else if(response.equals("2")){
+						Intent i = new Intent(activity, PrivateStartQuizActivity.class);
+						i.putExtra("hasAlreadyPlayed", true);
+						i.putExtra("roomId", roomID);
+						startActivity(i);
 						return;
 					}
-					JSONDeserializer<PrivateQuizRoom> des = new JSONDeserializer<PrivateQuizRoom>();
+					JSONDeserializer<PrivateQuizRoom>
+					des = new JSONDeserializer<PrivateQuizRoom>();
 					PrivateQuizRoom room = des.deserialize(response);
 					Intent i = new Intent(activity, PrivateStartQuizActivity.class);
 					i.putParcelableArrayListExtra("questions", (ArrayList<Question>)room.getQuestions());
+					i.putExtra("hasAlreadyPlayed", false);
 					i.putExtra("roomName", room.getRoomName());
 					i.putExtra("roomId", room.getRoomID());
 					i.putExtra("description", room.getDescription());
@@ -109,9 +130,11 @@ public class PrivateJoinQuizActivity extends Activity {
 		protected String doInBackground(String... arg0) {
 			String roomId = arg0[0];
 			String roomKey = arg0[1];
+			this.roomID = roomId;
+					
 			try{
 				
-				String getURL = KwizzieConsts.SERVER_URL+"quizRoom/private?"+"roomId="+roomId+"&key="+roomKey;
+				String getURL = KwizzieConsts.SERVER_URL+"quizRoom/private?"+"roomId="+roomId+"&key="+roomKey+"&player="+player.getUserName();
 				Log.i("server url",getURL);
 				
 				//GET REQUEST

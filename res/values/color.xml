@@ -3,4 +3,7 @@
     <color name="dark_grey">#888</color>
     <color name="app_background">#202020</color>
     <color name="list_item_background">#303030</color>
+    
+    <color name="incorrect_answer">#FF0000</color>
+	<color name="correct_answer">#006600</color>
 </resources>

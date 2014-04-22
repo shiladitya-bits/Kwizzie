@@ -8,6 +8,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.kwizzie.android.KwizzieConsts;
 import com.kwizzie.android.R;
 import com.kwizzie.android.timer.QuestionTimer;
 
@@ -53,7 +55,7 @@ public class MCQAnswerType implements AnswerType {
 	public MCQAnswerType(Parcel source) {
 		options = new ArrayList<String>();
 		source.readList(options, String.class.getClassLoader());
-		source.readInt();
+		this.correctOptionIndex = source.readInt();
 	}
 
 	@Override
@@ -73,6 +75,9 @@ public class MCQAnswerType implements AnswerType {
 		lp.topMargin=10;
 		lp.bottomMargin=10;
 		for(String option : options){
+			if(option.trim().length() == 0){
+				continue;
+			}
 			Button button = new Button(context);
 			button.setText(option);
 			button.setTextColor(context.getResources().getColor(android.R.color.black));
@@ -85,18 +90,30 @@ public class MCQAnswerType implements AnswerType {
 				@Override
 				public void onClick(View v) {
 					timer.cancel();
-					
 					String selectedText = ((Button)v).getText().toString();
+					PostAnswerTimer postTimer = new PostAnswerTimer(KwizzieConsts.POST_ANSWER_DELAY, KwizzieConsts.POST_ANSWER_DELAY, selectedText, options.get(correctOptionIndex));
 					if(selectedText.equals(options.get(correctOptionIndex))){
-						evaluateAns.onCorrectAnswer(timer.getElapsedSeconds());
+						updateCorrectAnswerUI((Button)v);
 					} else {
-						evaluateAns.onWrongAnswer();
+						updateWrongAnswerUI((Button)v);
 					}
+					postTimer.start();
 				}
 			});
 		}
 		
 	}
+	
+	private void updateWrongAnswerUI(Button btn) {
+		Activity activity = (Activity)evaluateAns;
+		btn.setTextColor(activity.getResources().getColor(R.color.incorrect_answer));
+	}
+
+	private void updateCorrectAnswerUI(Button btn) {
+		Activity activity = (Activity)evaluateAns;
+		btn.setTextColor(activity.getResources().getColor(R.color.correct_answer));
+	}
+	
 	  /**
      * Sets background of the view.
      * This method varies in implementation depending on Android SDK version.
@@ -159,5 +176,26 @@ public class MCQAnswerType implements AnswerType {
 		this.timer = timer;
 	}
 	
-	
+	private class PostAnswerTimer extends CountDownTimer{
+
+		String userAns, correctAns;
+		public PostAnswerTimer(long millisInFuture, long countDownInterval, String userAnswer, String correctAns) {
+			super(millisInFuture, countDownInterval);
+			this.userAns = userAnswer;
+			this.correctAns = correctAns;
+		}
+
+		@Override
+		public void onFinish() {
+			if(userAns.equalsIgnoreCase(correctAns)){
+				evaluateAns.onCorrectAnswer(timer.getElapsedSeconds());
+			} else{
+				evaluateAns.onWrongAnswer();
+			}
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {}
+		
+	}
 }

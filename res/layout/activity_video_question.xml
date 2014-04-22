@@ -31,7 +31,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:textColor="@android:color/black" 
+        android:color="@android:color/white"
+        android:textColor="@android:color/white" 
         android:layout_weight="10" 
         android:textSize="15sp"     
         />
@@ -42,6 +43,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_weight="25"
+		android:background="@drawable/video_play"
          />
        
     <LinearLayout

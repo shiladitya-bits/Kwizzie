@@ -1,14 +1,18 @@
 package com.kwizzie.model;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.os.CountDownTimer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.kwizzie.android.KwizzieConsts;
+import com.kwizzie.android.R;
 import com.kwizzie.android.timer.QuestionTimer;
 
 public class TextAnswerType implements AnswerType {
@@ -48,7 +52,27 @@ public class TextAnswerType implements AnswerType {
 
 	@Override
 	public void createAnswerLayout(LinearLayout layout, Activity context) {
-		LinearLayout horizontal = new LinearLayout(context);
+		
+		LinearLayout mainLayout = (LinearLayout) context.getLayoutInflater().inflate(R.layout.text_answer_layout, null);
+		layout.addView(mainLayout);
+		Button proceed = (Button) context.findViewById(R.id.proceed);
+		final EditText ansText = (EditText) context.findViewById(R.id.userAns);
+		proceed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				timer.cancel();
+				String ans = ansText.getText().toString().trim();
+				PostAnswerTimer postAnswerTimer = new PostAnswerTimer(KwizzieConsts.POST_ANSWER_DELAY, KwizzieConsts.POST_ANSWER_DELAY, ans, correctAnswer);
+				if(ans.equalsIgnoreCase(correctAnswer)){
+					updateCorrectAnswerUI();
+				} else{
+					updateWrongAnswerUI();
+				}
+				postAnswerTimer.start();
+			}
+		});
+		/*LinearLayout horizontal = new LinearLayout(context);
 		horizontal.setOrientation(LinearLayout.HORIZONTAL);
 		horizontal.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
@@ -70,15 +94,41 @@ public class TextAnswerType implements AnswerType {
 			public void onClick(View v) {
 				timer.cancel();
 				String ans = et.getText().toString().trim();
+				PostAnswerTimer postAnswerTimer = new PostAnswerTimer(1000, 1000, ans, correctAnswer);
 				if(ans.equalsIgnoreCase(correctAnswer)){
-					evalAns.onCorrectAnswer(timer.getElapsedSeconds());
+					updateCorrectAnswerUI();
 				} else{
-					evalAns.onWrongAnswer();
+					updateWrongAnswerUI();
 				}
+				postAnswerTimer.start();
 			}
-		});
+
+		});*/
 	}
 
+
+	private void updateWrongAnswerUI() {
+		Activity activity = (Activity)evalAns;
+		View toHide = activity.findViewById(R.id.textAnswerLayout);
+		View toShow = activity.findViewById(R.id.textPostAnswerLayout);
+		toHide.setVisibility(View.GONE);
+		toShow.setVisibility(View.VISIBLE);
+		TextView tvCorrectAns = (TextView)toShow.findViewById(R.id.tvCorrectAns);
+		tvCorrectAns.setText("Correct Answer: "+correctAnswer);
+		ImageView ivCorrectStatus = (ImageView)toShow.findViewById(R.id.ivCorrectDrawable);
+		ivCorrectStatus.setImageDrawable(activity.getResources().getDrawable(R.drawable.incorrect));
+	}
+
+	private void updateCorrectAnswerUI() {
+		Activity activity = (Activity)evalAns;
+		View toHide = activity.findViewById(R.id.textAnswerLayout);
+		View toShow = activity.findViewById(R.id.textPostAnswerLayout);
+		toHide.setVisibility(View.GONE);
+		toShow.setVisibility(View.VISIBLE);
+		TextView tvCorrectAns = (TextView)toShow.findViewById(R.id.tvCorrectAns);
+		tvCorrectAns.setText("Correct Answer: "+correctAnswer);
+	}
+	
 	@Override
 	public int describeContents() {
 		return hashCode();
@@ -123,5 +173,26 @@ public class TextAnswerType implements AnswerType {
 		this.timer = timer;
 	}
 	
-	
+	private class PostAnswerTimer extends CountDownTimer{
+
+		String userAns, correctAns;
+		public PostAnswerTimer(long millisInFuture, long countDownInterval, String userAnswer, String correctAns) {
+			super(millisInFuture, countDownInterval);
+			this.userAns = userAnswer;
+			this.correctAns = correctAns;
+		}
+
+		@Override
+		public void onFinish() {
+			if(userAns.equalsIgnoreCase(correctAns)){
+				evalAns.onCorrectAnswer(timer.getElapsedSeconds());
+			} else{
+				evalAns.onWrongAnswer();
+			}
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {}
+		
+	}
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="100" 
+    android:padding="10dp"
+    android:background="@color/app_background"
+    >
+    <TextView 
+        android:id="@+id/text1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="Neha Madaan"	
+	    android:layout_weight="20"
+	    android:textSize="20sp"
+        android:textColor="@android:color/white"
+        />
+    <TextView 
+        android:id="@+id/text2"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"	
+        android:text="100"
+        android:layout_weight="80"
+	    android:textSize="20sp"
+	    android:gravity="right"
+	     android:textColor="#bbbbbb"
+        />
+
+</LinearLayout>

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.kwizzie.model.Question;
 import com.kwizzie.model.QuestionType;
@@ -19,11 +21,28 @@ public class PrivateStartQuizActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_start_quiz);
-		
-		questions = getIntent().getExtras().getParcelableArrayList("questions");
-		roomName = getIntent().getExtras().getString("roomName");
+		boolean alreadyPlayed = getIntent().getExtras().getBoolean("hasAlreadyPlayed");
 		roomId = getIntent().getExtras().getString("roomId");
-		description = getIntent().getExtras().getString("description");
+		TextView numOfQuestext = (TextView)findViewById(R.id.numberOFQuestions);
+		TextView descriptionText = (TextView)findViewById(R.id.description);
+		TextView quizRoomNameText = (TextView)findViewById(R.id.quizRoomName);
+		if(alreadyPlayed){
+			TextView failMsg = (TextView) findViewById(R.id.tvFailMessage);
+			failMsg.setText("Oops !!! You have already played in this Quiz room.");
+			failMsg.setVisibility(View.VISIBLE);
+			Button startQuiz = (Button) findViewById(R.id.buttonStartQuiz);
+			startQuiz.setVisibility(View.GONE);
+			numOfQuestext.setVisibility(View.INVISIBLE);
+			descriptionText.setVisibility(View.INVISIBLE);
+			quizRoomNameText.setVisibility(View.INVISIBLE);
+		} else {
+			questions = getIntent().getExtras().getParcelableArrayList("questions");
+			roomName = getIntent().getExtras().getString("roomName");
+			description = getIntent().getExtras().getString("description");
+			numOfQuestext.setText("Number of questions: "+String.valueOf(questions.size()));
+			descriptionText.setText(description);
+			quizRoomNameText.setText(roomName);
+		}
 	}
 
 	@Override
@@ -44,6 +63,11 @@ public class PrivateStartQuizActivity extends Activity {
 			intent.putExtra("playerScore",0);
 			startActivity(intent);
 			finish();
+			break;
+		case R.id.buttonViewLeaderboard:
+			Intent leaderboardIntent = new Intent(this,LeaderBoardActivity.class);
+			leaderboardIntent.putExtra("roomID", roomId);
+			startActivity(leaderboardIntent);
 		}
 	}
 }

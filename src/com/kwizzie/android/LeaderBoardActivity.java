@@ -48,9 +48,11 @@ public class LeaderBoardActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(List<Leader> leaders) {
-			ListView leaderboardList = (ListView) activity.findViewById(R.id.leaderboardList);
-			LeaderBoardAdapter adapter = new LeaderBoardAdapter(activity, leaders,roomID);
-			leaderboardList.setAdapter(adapter);
+			if(leaders != null){
+				ListView leaderboardList = (ListView) activity.findViewById(R.id.leaderboardList);
+				LeaderBoardAdapter adapter = new LeaderBoardAdapter(activity, leaders, getIntent().getExtras().getString("category"));
+				leaderboardList.setAdapter(adapter);	
+			}
 		}
 
 		@Override

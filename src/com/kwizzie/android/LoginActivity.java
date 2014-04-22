@@ -18,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kwizzie.model.Player;
 
@@ -56,7 +58,7 @@ public class LoginActivity extends Activity {
 	Player player;
 	Bitmap imageBitmap; 
 	String response;
-	
+	ProgressDialog pd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,8 +68,11 @@ public class LoginActivity extends Activity {
 	usernameText = (EditText) findViewById(R.id.username);
 	passwordText = (EditText) findViewById(R.id.password);
 	loginB = (Button) findViewById(R.id.LoginB);
+	pd = new ProgressDialog(this);
+	pd.setMessage("Logging in");
+	pd.setCancelable(false);
 	loginB.setOnClickListener(new View.OnClickListener() {
-	
+
 		@Override
 		public void onClick(View arg0) {
 			
@@ -87,6 +92,7 @@ public class LoginActivity extends Activity {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
 						intent.addCategory(Intent.CATEGORY_HOME);
 						startActivity(intent);
+						
 					}
 				}).setCancelable(false).show();
 			}
@@ -172,6 +178,7 @@ public class LoginActivity extends Activity {
 				imageBitmap = BitmapFactory.decodeResource(LoginActivity.this.getResources(), R.drawable.ic_launcher);
 			}
 			saveImage();
+			pd.cancel();
 		}
 
 		@Override
@@ -199,6 +206,7 @@ public class LoginActivity extends Activity {
 		
 		Intent intent = new Intent(getApplicationContext(),JoinQuizRoomActivity.class);
 		startActivity(intent);
+		finish();
 	 }
 	 
 	public boolean isNetworkAvailable() 
@@ -221,19 +229,39 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			JSONDeserializer<Player> deserializer  = new JSONDeserializer<Player>();
-			player = deserializer.deserialize(result);
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			Editor prefEditor =  pref.edit();
-			JSONSerializer ser = new JSONSerializer();
-			String jsonPlayer = ser.deepSerialize(player);
-			prefEditor.putString("player", jsonPlayer);
-			prefEditor.commit();
-			new DownloadImageTask().execute(player.getDetails().getPhotoUrl());
+			if(result == ""){
+				TextView tvFailMsg = (TextView)findViewById(R.id.tvFailMessage);
+				tvFailMsg.setVisibility(View.VISIBLE);
+				pd.cancel();
+				return;
+			}
+			try{
+				JSONDeserializer<Player> deserializer  = new JSONDeserializer<Player>();
+				player = deserializer.deserialize(result);
+				SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				Editor prefEditor =  pref.edit();
+				JSONSerializer ser = new JSONSerializer();
+				String jsonPlayer = ser.deepSerialize(player);
+				prefEditor.putString("player", jsonPlayer);
+				prefEditor.commit();
+				new DownloadImageTask().execute("http://"+player.getDetails().getPhotoUrl());
+			} catch(Exception e){
+				e.printStackTrace();
+				TextView tvFailMsg = (TextView)findViewById(R.id.tvFailMessage);
+				tvFailMsg.setVisibility(View.VISIBLE);
+				tvFailMsg.setText("Error in connection!");
+				if(pd.isShowing()){
+					pd.cancel();
+				}
+			}
 		}
 
 		@Override
-		protected void onPreExecute() {		}
+		protected void onPreExecute() {		
+			TextView tvFailMsg = (TextView)findViewById(R.id.tvFailMessage);
+			tvFailMsg.setVisibility(View.INVISIBLE);
+			pd.show();
+		}
 
 		@Override
 		protected String doInBackground(String... args) {

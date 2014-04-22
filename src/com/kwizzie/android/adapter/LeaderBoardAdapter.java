@@ -1,5 +1,6 @@
 package com.kwizzie.android.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -24,6 +25,9 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 	public LeaderBoardAdapter(Context context,
 			List<Leader> objects, String roomID) {
 		super(context, R.layout.leaderboard_row_layout, objects);
+		if(objects == null){
+			objects = new ArrayList<Leader>();
+		}
 		this.context=context;
 		this.leaders = objects;
 	}
@@ -49,7 +53,7 @@ public class LeaderBoardAdapter extends ArrayAdapter<Leader>{
 					//TODO Server call to get player using username
 					//Player player = new Player("dravid123","Dravids","Rahul Dravid","dravid@gmail.com");
 					Intent intent = new Intent(context,UserProfileActivity.class);
-					//intent.putExtra("player", player);
+					intent.putExtra("playerID", leaders.get(position).getUsername());
 					context.startActivity(intent);
 				}
 			});

@@ -1,18 +1,23 @@
 package com.kwizzie.android;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -37,6 +42,9 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 	QuestionTimer timer;
 	LocationManager locationManager;
 	QuestionLocationListener listener;
+	MediaController controller;
+	
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,37 +64,74 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 		scoreTv.setText(String.valueOf(playerScore));
 		VideoQuestion ques = (VideoQuestion)questions.get(questionNumber);		
 		View quesLockLayout = findViewById(R.id.quesLockEmbedLayout);
-		
-		
 		Button skipButton = (Button)quesLockLayout.findViewById(R.id.skipQues);
+
 		skipButton.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
 				onWrongAnswer();
 				VideoQuestionActivity.this.finish();
-				
 			}
 		});
 		ques.getAnswerType().setEvaluateAnswerController(this);
 		quesTitle.setText(ques.getQuestionTitle());
 		ques.getAnswerType().createAnswerLayout((LinearLayout)findViewById(R.id.answerLayout), this);
-		Uri uri=Uri.parse(ques.getVideoURL());
+		String url;
+		if(ques.getVideoURL().startsWith("localhost")){
+			url = "10.0.2.2"+ques.getVideoURL().substring(9);
+		} else {
+			url = ques.getVideoURL();
+		}
+		String finalUrl;
+		StringTokenizer portToken = new StringTokenizer(url, "/");
+		if(!quizRoomID.equals("public")){
+			finalUrl = "http://"+portToken.nextToken();
+		} else {
+			finalUrl = "http://"+portToken.nextToken()+":8080";
+		}
+		while(portToken.hasMoreTokens()){
+			finalUrl = finalUrl+"/"+portToken.nextToken();
+		}
+		url = finalUrl;
+		controller = new MediaController(this);
+		controller.setAnchorView(view);
+		controller.setMediaPlayer(view);
+		Uri uri=Uri.parse(url);
+		view.setMediaController(controller);
 		view.setVideoURI(uri);
-		view.start();
+		view.requestFocus();
+		view.setFocusable(true);
+		view.setBackground(getResources().getDrawable(R.drawable.video_play));
+		view.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				view.setBackgroundDrawable(null);
+				view.start();
+				return true;
+			}
+		});
+		view.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				timer.start();
+			}
+		});
 		
 		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
-		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		timer = new QuestionTimer(this, timeRemainingTv, KwizzieConsts.QUESTION_TIME_LIMIT);
 		ques.getAnswerType().setTimer(timer);
-
+		
 		if(ques.getLocation() ==null){
 			quesLockLayout.setVisibility(View.GONE);
-			timer.start();
 		} else {
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
-			
+			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
+			tvDest.setText(ques.getLocation().getLocationName());
+
 		}
 
 
@@ -94,12 +139,13 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.video_question, menu);
 		return true;
 	}
+
 	@Override
 	public void onCorrectAnswer(int time) {
+		view.stopPlayback();
 		if(locationManager != null){
 			locationManager.removeUpdates(listener);
 		}
@@ -107,7 +153,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 		playerScore=playerScore + 20 - time;
 		scoreTv.setText(String.valueOf(playerScore));
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
@@ -126,6 +172,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 
 	@Override
 	public void onWrongAnswer() {
+		view.stopPlayback();
 		if(locationManager != null){
 			locationManager.removeUpdates(listener);
 		}

@@ -57,6 +57,6 @@ public class RegistrationCompleteActivity extends Activity {
 	public void onSignUp(View v){
 		Intent intent = new Intent (this , LoginActivity.class);
 		startActivity(intent);
-		
+		finish();
 	}
 }

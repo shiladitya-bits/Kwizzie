@@ -1,23 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    
+    >
+   
+<LinearLayout 
     android:id="@+id/textAnswerLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" 
-    android:weightSum="100">
-   
+    android:weightSum="100"
+    >
+    
 <EditText
+    android:id="@+id/userAns"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:ems="20"
-    android:hint="answer"
+    android:hint="enter your answer here"
     android:layout_weight="30"
+    android:maxLines="1"
+    android:textColor="@android:color/white"
+    android:ellipsize="start"
     />    
 <Button 
+    android:id="@+id/proceed"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"    
 	android:text="Proceed"
 	android:layout_weight="70"
-    />
+    />    
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/textPostAnswerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:gravity="center"
+ >
+
+    <ImageView
+        android:id="@+id/ivCorrectDrawable"   
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitStart"
+        android:src="@drawable/correct" />
+
+    <TextView
+        android:id="@+id/tvCorrectAns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:ellipsize="start"
+        android:ems="20"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:text="Correct Answer" />
+
+
+</LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.kwizzie.android;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
@@ -8,19 +9,26 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -30,13 +38,27 @@ import android.widget.EditText;
 
 public class RegistrationActivity extends Activity {
 
+	EditText etUsername;
+	EditText etName;
+	EditText etEmailId;
+	EditText etPassword;
+	EditText etRetypePassword;
+	Uri profileImageURI;
+	ProgressDialog pd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registration);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+		pd = new ProgressDialog(this);
+		pd.setMessage("Registering");
+		pd.setCancelable(false);
+		etUsername = (EditText)findViewById(R.id.usernameText);
+		etName = (EditText)findViewById(R.id.nameText);
+		etEmailId = (EditText)findViewById(R.id.emailText);
+		etPassword = (EditText)findViewById(R.id.passwordText);
+		etRetypePassword = (EditText)findViewById(R.id.retypePasswordText);
 		
 	}
 
@@ -80,13 +102,69 @@ public class RegistrationActivity extends Activity {
 		
 	}
 	public void onBtnClick(View v){
-		String username = ((EditText)findViewById(R.id.usernameText)).getText().toString();
-		String name = ((EditText)findViewById(R.id.nameText)).getText().toString();
-		String emailID = ((EditText)findViewById(R.id.emailText)).getText().toString();
-		String password = ((EditText)findViewById(R.id.passwordText)).getText().toString();
+		switch(v.getId()){
+		case R.id.btnBrowse:
+			Intent i = new Intent();
+			i.setType("image/*");
+			i.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(Intent.createChooser(i, "Select Profile Picture"), 1);
+			break;
+		case R.id.signUpB:
+			String username = etUsername.getText().toString();
+			String name = etName.getText().toString();
+			String emailID = etEmailId.getText().toString();
+			String password = etPassword.getText().toString();
+			String retypePassword = etRetypePassword.getText().toString();
+			if(username.trim().length() ==0){
+				etUsername.setError("Username cannot be empty");
+				etUsername.requestFocus();
+				return;
+			}
+			if(name.trim().length() ==0){
+				etName.setError("Username cannot be empty");
+				etName.requestFocus();
+				return;			
+			}
+			
+			if(emailID.trim().length() ==0){
+				etEmailId.setError("Username cannot be empty");
+				etEmailId.requestFocus();
+				return;
+			}
+			if(password.trim().length() == 0){
+				etPassword.setError("Password cannot be empty");
+				etPassword.requestFocus();
+				return;
+			}
+			if(!password.trim().equals(retypePassword)){
+				etRetypePassword.setError("Passwords do not match!");
+				etRetypePassword.requestFocus();
+				return;
+			}
+			new DownloadData(this).execute(username , name , emailID ,password);
+			break;
+		}
+
 		
-		new DownloadData(this).execute(username , name , emailID ,password);
-		
+	}
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == RESULT_OK){
+			if(requestCode == 1){
+				profileImageURI = data.getData();
+			}
+		}
+	}
+
+
+	public String getRealPathFromUri(Uri contentUri){
+		String proj[] = {MediaStore.Images.Media.DATA};
+		android.database.Cursor cursor = managedQuery(contentUri, proj, null,null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
 	
 	private class DownloadData extends AsyncTask<String, Void, String> {
@@ -100,16 +178,20 @@ public class RegistrationActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
+			pd.cancel();
 			if(result.equals("1")){
 				Intent intent = new Intent(activity , RegistrationCompleteActivity.class);
 				startActivity(intent);
+				finish();
 			} else {
 				updateUI();
 			}
 		}
 
 		@Override
-		protected void onPreExecute() {		}
+		protected void onPreExecute() {	
+			pd.show();
+		}
 
 		@Override
 		protected String doInBackground(String... args) {
@@ -118,20 +200,41 @@ public class RegistrationActivity extends Activity {
 				String name = args[1];
 				String emailID = args[2];
 				String password  = args[3];
-				String getURL = SERVER_URL;
-				Log.i("server url",getURL);
+				File image = null;
+				HttpClient httpClient;
+				HttpPost httppost;
 				
-				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-				nameValuePairs.add(new BasicNameValuePair("username", username));
-				nameValuePairs.add(new BasicNameValuePair("name", name));
-				nameValuePairs.add(new BasicNameValuePair("emailID", emailID));
-				nameValuePairs.add(new BasicNameValuePair("password", password));
-			
-				// POST REQUEST
-				HttpClient httpclient = new DefaultHttpClient();				
-				HttpPost httppost = new HttpPost(getURL);
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				HttpResponse httpResponse = httpclient.execute(httppost);
+				if(profileImageURI != null){
+					String getURL = KwizzieConsts.SERVER_BASE_URL+"RegistrationServlet";
+					Log.i("server url",getURL);
+					httpClient = new DefaultHttpClient();				
+					httppost = new HttpPost(getURL);				
+					image = new File(getRealPathFromUri(profileImageURI));
+					MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+					mpEntity.addPart("image", new FileBody(image, "application/octet"));
+					mpEntity.addPart("username", new StringBody(username));
+					mpEntity.addPart("name", new StringBody(name));
+					mpEntity.addPart("emailID", new StringBody(emailID));
+					mpEntity.addPart("password", new StringBody(password));
+
+					httppost.setEntity(mpEntity);
+
+				} else {
+					String getURL = SERVER_URL;
+					Log.i("server url",getURL);
+					httpClient = new DefaultHttpClient();				
+					httppost = new HttpPost(getURL);				
+					ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+					nameValuePairs.add(new BasicNameValuePair("username", username));
+					nameValuePairs.add(new BasicNameValuePair("name", name));
+					nameValuePairs.add(new BasicNameValuePair("emailID", emailID));
+					nameValuePairs.add(new BasicNameValuePair("password", password));
+
+					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+					
+				}
+					
+				HttpResponse httpResponse = httpClient.execute(httppost);
 				HttpEntity resEntityGet = httpResponse.getEntity();  
 	
 			if (resEntityGet != null) 

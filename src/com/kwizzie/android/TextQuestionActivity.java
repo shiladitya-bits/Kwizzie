@@ -65,7 +65,7 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 		ques.getAnswerType().createAnswerLayout((LinearLayout)findViewById(R.id.answerLayout), this);
 	
 		timeRemainingTv = (TextView)embedLayout.findViewById(R.id.tvTimeRemaining);
-		timer = new QuestionTimer(this, timeRemainingTv, 10000);
+		timer = new QuestionTimer(this, timeRemainingTv, KwizzieConsts.QUESTION_TIME_LIMIT);
 		ques.getAnswerType().setTimer(timer);
 
 		View quesLockLayout = findViewById(R.id.quesLockEmbedLayout);
@@ -76,9 +76,12 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
-			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
+			tvDest.setText(ques.getLocation().getLocationName());
+			
+			/*	Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
-			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));
+			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));*/
 		}
 		/*//just to check
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);

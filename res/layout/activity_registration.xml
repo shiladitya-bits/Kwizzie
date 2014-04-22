@@ -3,11 +3,21 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="100"
     android:background="@color/app_background"
     >
-
-    <EditText
+<ScrollView 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_background"
+    >
+    
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
+    >
+<EditText
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,6 +71,39 @@
         android:textColor="@android:color/white"
         />
     
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_margin="20dp"
+        >
+
+        <TextView
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="Upload photo"
+            android:textColor="@color/dark_grey" 
+            android:layout_gravity="center"
+            />
+    	    
+        <Button
+            android:id="@+id/btnBrowse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+        android:background="#777"
+            android:onClick="onBtnClick"
+            android:text="Browse"
+            android:layout_marginRight="20dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+        
     <Button 
         android:id="@+id/signUpB"
         android:layout_marginLeft="40dp"
@@ -75,6 +118,9 @@
         android:onClick="onBtnClick"
         android:textColor="@android:color/white"
         />
-    
+
+</LinearLayout>
+        
+</ScrollView>
 
 </LinearLayout>

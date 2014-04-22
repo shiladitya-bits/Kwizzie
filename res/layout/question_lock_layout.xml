@@ -58,7 +58,8 @@
 	        android:paddingRight="20dp"
 	        android:layout_margin="20dp"
 	        android:layout_gravity="right"
-	        android:background="@drawable/button_rounded"
+	        android:background="@drawable/button_rounded_negative"
+	        android:textColor="@android:color/white"
 	        android:text="Skip Question" />
 
 

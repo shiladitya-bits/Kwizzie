@@ -18,6 +18,8 @@
         android:maxLines="1"
         android:maxLength="20"
         android:ellipsize="start"
+        android:textCursorDrawable="@null"
+        
         />
     
       <EditText
@@ -32,8 +34,22 @@
         android:maxLines="1"
         android:maxLength="20"
         android:ellipsize="start"
+        android:textCursorDrawable="@null"
+        
       />
-      
+    
+    <TextView
+        android:id="@+id/tvFailMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="authentication failed!"
+        android:textColor="#FF0000"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_marginBottom="10dp"
+        />
+          
       <Button 
         android:id="@+id/LoginB"
         android:layout_width="fill_parent"

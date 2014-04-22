@@ -105,7 +105,6 @@ public class CategoryListAdapter extends ArrayAdapter<QuestionCategory> {
 		protected void onPostExecute(String result) {
 			pd.cancel();
 			if(result != null){
-				Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
 				try{
 					if(response.equals("")){
 						Toast.makeText(activity, "Room does not exist or incorrect security key!", Toast.LENGTH_SHORT).show();

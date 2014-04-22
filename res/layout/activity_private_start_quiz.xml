@@ -5,6 +5,52 @@
 	android:orientation="vertical"
 >
 
+    <TextView 
+        android:id="@+id/quizRoomName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:text="Room Name"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+    
+        <TextView 
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Description"
+        android:textSize="15dp"
+        android:gravity="center"
+        />
+    
+    <TextView 
+        android:id="@+id/numberOFQuestions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Number Of Questions: "
+        android:textColor="#aaa"
+        android:gravity="center"
+        android:textStyle="bold"
+        
+        />
+
+
+ <TextView
+        android:id="@+id/tvFailMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="authentication failed!"
+        android:textColor="#FF0000"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_marginBottom="10dp"
+        />
+    
     <Button
         android:id="@+id/buttonStartQuiz"
         android:layout_width="fill_parent"
@@ -17,15 +63,15 @@
         android:onClick="onBtnClick"
      />
     
-    <TextView 
-        android:id="@+id/numberOFQuestions"
+    <Button
+        android:id="@+id/buttonViewLeaderboard"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Number Of Questions: "
-        android:gravity="center"
-        android:textStyle="bold"
-        
-        />
-
+        android:text="View Leaderboard"
+        android:background="@drawable/button_rounded" 
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:onClick="onBtnClick"
+     />
 </LinearLayout>

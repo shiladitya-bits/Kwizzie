@@ -95,13 +95,16 @@ public class PrivateQuizFinishActivity extends Activity {
 		switch(v.getId()){
 		case R.id.leaderboardBtn:
 			Intent i = new Intent(this, LeaderBoardActivity.class);
-			i.putExtra("roomID", quizRoomID);
+			/*if(quizRoomID.equals("public")){
+				QuestionCategory category = getIntent().getExtras().getParcelable("category");
+				i.putExtra("roomID", category.getCategoryCode());
+			} else {*/
+				i.putExtra("roomID", quizRoomID);
+			//}
 			startActivity(i);
 			finish();
 			break;
 		case R.id.leaveRoomBtn:
-			Intent i2 = new Intent(this, JoinQuizRoomActivity.class);
-			startActivity(i2);
 			finish();
 			break;
 		}
@@ -129,20 +132,19 @@ public class PrivateQuizFinishActivity extends Activity {
 			String roomID = args[1];
 			String score = args[2];
 
-			String getURL = KwizzieConsts.SERVER_URL+"player/updatePrivateScore";
-			Log.i("server url",getURL);
-
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("roomID", roomID));
 			nameValuePairs.add(new BasicNameValuePair("username", username));
 			nameValuePairs.add(new BasicNameValuePair("score", score));
-			
-			
+			String getURL = KwizzieConsts.SERVER_URL+"player/updatePrivateScore";
+				
 			if(roomID.equals("public")){
 				QuestionCategory category = getIntent().getExtras().getParcelable("category");
 				getURL = KwizzieConsts.SERVER_URL+"player/updatePublicScore";
 				nameValuePairs.add(new BasicNameValuePair("category", category.getCategoryCode()));
 			}
+			Log.i("server url",getURL);
+
 			try{
 				// POST REQUEST
 				HttpClient httpclient = new DefaultHttpClient();				

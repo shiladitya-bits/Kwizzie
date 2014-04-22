@@ -9,7 +9,7 @@
  <include 
      android:id="@+id/quesLockEmbedLayout"
    	layout="@layout/question_lock_layout"
-     />
+     />   
  
     <LinearLayout
         android:id="@+id/quesUnlockLayout"
@@ -18,9 +18,9 @@
     	android:orientation="vertical"
     	android:weightSum="100"
      >
-	<include 
+ 	<include 
     	android:id="@+id/embedLayout"
-    	layout="@layout/question_header_layout"/>
+    	layout="@layout/question_header_layout"/> 
     <TextView
         android:id="@+id/questionTitle"
         android:layout_width="fill_parent"
@@ -34,6 +34,8 @@
         android:gravity="center"
         android:layout_weight="10" 
         android:textSize="15sp"     
+                android:color="@android:color/white"
+        
         />
     <LinearLayout
         android:layout_weight="10"
@@ -44,14 +46,22 @@
         
          >
         
-    <Button 
+    <ImageButton
         android:id="@+id/playB"
+        android:layout_width="87dp"
+        android:layout_height="87dp"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:src="@drawable/play_audio"
+        android:text="Play" />
+
+    <ProgressBar
+        android:id="@+id/pbLoadingAudio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play"
-		android:background="@drawable/button_rounded"    
-		    
-        />
+         />
+
     </LinearLayout>
     
       <LinearLayout
@@ -62,8 +72,6 @@
         android:weightSum="100" 
         android:layout_weight="80"
         >
-
-
-</LinearLayout>
+	</LinearLayout>
 </LinearLayout>
 </LinearLayout>
