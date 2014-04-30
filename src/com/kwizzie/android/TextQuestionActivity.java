@@ -79,9 +79,11 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
 			tvDest.setText(ques.getLocation().getLocationName());
 			
-			/*	Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
-			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));*/
+			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if(temp!=null){
+				Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
+				Log.i("currentLocation" , String.valueOf(temp.getLongitude()));	
+			}
 		}
 		/*//just to check
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -109,7 +111,7 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 		playerScore=playerScore + 20 - time;
 		scoreTv.setText(String.valueOf(playerScore));
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
@@ -133,7 +135,7 @@ public class TextQuestionActivity extends Activity implements EvaluateAnswer{
 		}
 		questionNumber++;
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());

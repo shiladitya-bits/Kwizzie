@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kwizzie.android.qr.IntentIntegrator;
 import com.kwizzie.android.qr.IntentResult;
@@ -87,6 +90,12 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
 			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
 			tvDest.setText(ques.getLocation().getLocationName());
+			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if(temp!=null){
+				Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
+				Log.i("currentLocation" , String.valueOf(temp.getLongitude()));	
+			}
+		
 		}
 				
 	}
@@ -98,13 +107,17 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 	
 	@Override
 	protected void onActivityResult(int requestCode , int resultCode , Intent intent){
+		if(resultCode != RESULT_OK){
+			Toast.makeText(this, "Oops! Your camera device is not working!", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		IntentResult scanResult =IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		timer.cancel();
 		if(scanResult != null){
 			 String output = scanResult.getContents();
 			 String correctAns = ((QRAnswerType)ques.getAnswerType()).getAnswer();
 	    		
-	    		PostAnswerTimer finishTimer = new PostAnswerTimer(KwizzieConsts.POST_ANSWER_DELAY, KwizzieConsts.POST_ANSWER_DELAY, output, correctAns);
+    		PostAnswerTimer finishTimer = new PostAnswerTimer(KwizzieConsts.POST_ANSWER_DELAY, KwizzieConsts.POST_ANSWER_DELAY, output, correctAns);
 			 if(output.equalsIgnoreCase(correctAns)){				 	
 				 View v = findViewById(R.id.qrPostAnswerLayout);
 		    	 v.setVisibility(View.VISIBLE);
@@ -117,7 +130,6 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		    		ivIncorrect.setImageDrawable(getResources().getDrawable(R.drawable.incorrect));
 		    		View v = findViewById(R.id.qrPostAnswerLayout);
 		    		v.setVisibility(View.VISIBLE);
-		    		
 		    		finishTimer.start();
 		    	}
 		} else {
@@ -141,7 +153,7 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		playerScore=playerScore + 20 - time/10;
 		scoreTv.setText(String.valueOf(playerScore));
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
@@ -165,7 +177,7 @@ public class QRQuestionActivity extends Activity  implements EvaluateAnswer{
 		}
 		questionNumber++;
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());

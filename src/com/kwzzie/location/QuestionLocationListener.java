@@ -5,9 +5,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.kwizzie.android.KwizzieConsts;
+import com.kwizzie.android.R;
 import com.kwizzie.android.timer.QuestionTimer;
 import com.kwizzie.model.QuestionLocation;
 
@@ -18,6 +23,7 @@ public class QuestionLocationListener implements LocationListener{
 	Location destination;
 	View quesLockLayout;
 	QuestionTimer timer;
+	CountDownTimer unlockedTimer;
 	
 	public QuestionLocationListener(Activity activity, QuestionLocation questionLocation , View quesLockLayout, QuestionTimer timer){
 		this.questionLocation = questionLocation;
@@ -34,9 +40,27 @@ public class QuestionLocationListener implements LocationListener{
 		Log.i("currentLocation" , String.valueOf(location.getLongitude()));
 		double radius = questionLocation.getRadius();
 		float distance = location.distanceTo(destination);
-		if(distance < radius){
-			quesLockLayout.setVisibility(View.GONE);
-			timer.start();
+		TextView tvDist = (TextView)quesLockLayout.findViewById(R.id.tvDestDistance);
+		tvDist.setText(String.valueOf(distance)+" metres");
+		unlockedTimer = new CountDownTimer(2000, 2000) {
+			
+			@Override
+			public void onTick(long millisUntilFinished) {}
+			
+			@Override
+			public void onFinish() {
+				
+				quesLockLayout.setVisibility(View.GONE);
+				timer.start();
+			}
+		};
+
+		if(distance < KwizzieConsts.DEFAULT_RADIUS){  //TODO: change later to question radius
+			unlockedTimer.start();
+			View btnView = quesLockLayout.findViewById(R.id.skipQues);
+			btnView.setVisibility(View.INVISIBLE);
+			/*quesLockLayout.setVisibility(View.GONE);
+			timer.start();*/
 			/*View quesUnlockLayout = activity.findViewById(R.id.quesUnlockLayout);
 			quesLockLayout.setVisibility(View.VISIBLE);*/
 		}

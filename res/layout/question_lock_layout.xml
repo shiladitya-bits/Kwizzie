@@ -6,6 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/lockMsgText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -14,6 +15,7 @@
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 	    <TextView 
+	        android:id="@+id/lockMsgText2"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 			android:text="Please make sure GPS is turned on"
@@ -44,11 +46,29 @@
 
     <ImageView
         android:id="@+id/destiImage"
-        android:layout_width="264dp"
-        android:layout_height="250dp"
+        android:layout_width="187dp"
+        android:layout_height="177dp"
         android:layout_gravity="center"
         android:scaleType="centerInside"
         android:src="@drawable/ic_launcher" />
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Distance to destination: "
+        android:textSize="15sp" 
+        android:textColor="#ccc"
+        />
+    
+    <TextView
+        android:id="@+id/tvDestDistance"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp" 
+        android:textColor="#ccc"
+        />
     
        <Button
            android:id="@+id/skipQues"

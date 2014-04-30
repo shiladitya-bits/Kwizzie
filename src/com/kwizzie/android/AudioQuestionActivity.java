@@ -105,9 +105,12 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 			locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 			listener = new QuestionLocationListener(this, ques.getLocation() , quesLockLayout, timer);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
-/*			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
-			Log.i("currentLocation" , String.valueOf(temp.getLongitude()));*/
+			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if(temp!=null){
+				Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
+				Log.i("currentLocation" , String.valueOf(temp.getLongitude()));	
+			}
+		
 			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
 			tvDest.setText(ques.getLocation().getLocationName());
 			
@@ -168,7 +171,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 		playerScore=playerScore + 20 - time;
 		scoreTv.setText(String.valueOf(playerScore));
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
@@ -193,7 +196,7 @@ public class AudioQuestionActivity extends Activity implements EvaluateAnswer{
 		}
 		questionNumber++;
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());

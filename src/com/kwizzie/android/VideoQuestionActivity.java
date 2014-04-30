@@ -7,10 +7,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -131,7 +133,12 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , KwizzieConsts.MINIMUM_TIME_BETWEEN_UPDATE, KwizzieConsts.MINIMUM_DISTANCECHANGE_FOR_UPDATE ,listener);
 			TextView tvDest = (TextView)findViewById(R.id.tvDestiName);
 			tvDest.setText(ques.getLocation().getLocationName());
-
+			Location temp = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if(temp!=null){
+				Log.i("currentLocation" , String.valueOf(temp.getLatitude()));
+				Log.i("currentLocation" , String.valueOf(temp.getLongitude()));	
+			}
+		
 		}
 
 
@@ -178,7 +185,7 @@ public class VideoQuestionActivity extends Activity implements EvaluateAnswer {
 		}
 		questionNumber++;
 		Intent intent;
-		if(questionNumber==questions.size()){
+		if(questionNumber>=questions.size()){
 			intent = new Intent(this,PrivateQuizFinishActivity.class);
 		} else {
 			intent = new Intent(this,QuestionType.valueOf(questions.get(questionNumber).getTypeOfQuestion()).getQuestionType());
